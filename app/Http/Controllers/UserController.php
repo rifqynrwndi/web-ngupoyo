@@ -3,19 +3,42 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     //index
-    public function index()
+    public function index(Request $request)
     {
-        //search by name, pagination 10
-        $users = User::where('name', 'like', '%' . request('name') . '%')
-            ->orderBy('id', 'desc')
-            ->paginate(10);
-        return view('pages.users.index', compact('users'));
+        $token = session('token');
+
+    $response = Http::withToken($token)
+                    ->get('https://back-end-absensi.vercel.app/api/users');
+
+    if ($response->failed()) {
+        return redirect()->back()->with('error', 'Gagal mengambil data dari API');
+    }
+
+    $data = $response->json()['data'];
+
+    $perPage = 10; // Misalnya 10 item per halaman
+    $currentPage = LengthAwarePaginator::resolveCurrentPage();
+
+    $currentItems = array_slice($data, ($currentPage - 1) * $perPage, $perPage);
+
+    $users = new LengthAwarePaginator(
+    $currentItems,
+    count($data),
+    $perPage,
+    $currentPage,
+    ['path' => Paginator::resolveCurrentPath()]
+    );
+
+    return view('pages.users.index', compact('users'));
     }
 
     //create

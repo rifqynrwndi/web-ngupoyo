@@ -3,26 +3,45 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use App\Models\Permission;
 use App\Models\User;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
 
-
-
 class PermissionController extends Controller
 {
     //index
     public function index(Request $request)
-    {
-        $permissions = Permission::with('user')
-            ->when($request->input('name'), function ($query, $name) {
-                $query->whereHas('user', function ($query) use ($name) {
-                    $query->where('name', 'like', '%' . $name . '%');
-                });
-            })->orderBy('id', 'desc')->paginate(10);
-        return view('pages.permission.index', compact('permissions'));
+{
+    $token = session('token');
+
+    $response = Http::withToken($token)
+                    ->get('https://back-end-absensi.vercel.app/api/permission');
+
+    if ($response->failed()) {
+        return redirect()->back()->with('error', 'Gagal mengambil data dari API');
     }
+
+    $data = $response->json()['data'];
+
+    $perPage = 10; // Misalnya 10 item per halaman
+    $currentPage = LengthAwarePaginator::resolveCurrentPage();
+
+    $currentItems = array_slice($data, ($currentPage - 1) * $perPage, $perPage);
+
+    $permissions = new LengthAwarePaginator(
+    $currentItems,
+    count($data),
+    $perPage,
+    $currentPage,
+    ['path' => Paginator::resolveCurrentPath()]
+    );
+
+    return view('pages.permission.index', compact('permissions'));
+}
 
     //view
     public function show($id)

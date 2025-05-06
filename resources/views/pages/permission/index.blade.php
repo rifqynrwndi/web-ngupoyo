@@ -59,59 +59,43 @@
                                         <tr>
 
                                             <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Department</th>
+                                            <th>Jenis</th>
+                                            <th>Alasan</th>
                                             <th>Date Permission</th>
                                             <th>Is Approval</th>
 
                                             <th>Action</th>
                                         </tr>
                                         @foreach ($permissions as $permission)
-                                            <tr>
-
-                                                <td>{{ $permission->user->name }}
-                                                </td>
-                                                <td>
-                                                    {{ $permission->user->position }}
-                                                </td>
-                                                <td>
-                                                    {{ $permission->user->department }}
-                                                </td>
-                                                <td>
-                                                    {{ $permission->date_permission }}
-                                                </td>
-                                                <td>
-                                                    @if ($permission->is_approved == 1)
-                                                        Approved
-                                                    @else
-                                                        Not Approved
-                                                    @endif
-                                                </td>
-
-
-                                                <td>
-                                                    <div class="d-flex justify-content-center">
-                                                        <a href='{{ route('permissions.show', $permission->id) }}'
-                                                            class="btn btn-sm btn-info btn-icon">
-                                                            <i class="fas fa-edit"></i>
-                                                            Detail
-                                                        </a>
-
-                                                        <form action="{{ route('permissions.destroy', $permission->id) }}"
-                                                            method="POST" class="ml-2">
-                                                            <input type="hidden" name="_method" value="DELETE" />
-                                                            <input type="hidden" name="_token"
-                                                                value="{{ csrf_token() }}" />
-                                                            <button class="btn btn-sm btn-danger btn-icon confirm-delete">
-                                                                <i class="fas fa-times"></i> Delete
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-
-
+                                        <tr>
+                                            <td>{{ $permission['userId']['fullName'] ?? '-' }}</td>
+                                            <td>{{ $permission['jenisPermission'] ?? '-' }}</td>
+                                            <td>{{ $permission['alasan'] ?? '-' }}</td>
+                                            <td>
+                                                {{ \Carbon\Carbon::parse($permission['tanggalMulai'])->translatedFormat('d M Y') }}
+                                                -
+                                                {{ \Carbon\Carbon::parse($permission['tanggalSelesai'])->translatedFormat('d M Y') }}
+                                            </td>
+                                            <td>
+                                                {{ $permission['status'] ?? 'Menunggu Persetujuan' }}
+                                            </td>
+                                            <td>
+                                                <div class="d-flex justify-content-center">
+                                                    <a href="#" class="btn btn-sm btn-info btn-icon">
+                                                        <i class="fas fa-eye"></i> Detail
+                                                    </a>
+                                                    {{-- Untuk delete, kita perlu simpan _id --}}
+                                                    <form action="{{ route('permissions.destroy', $permission['_id']) }}" method="POST" class="ml-2">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="btn btn-sm btn-danger btn-icon confirm-delete">
+                                                            <i class="fas fa-times"></i> Delete
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                     </table>
                                 </div>
                                 <div class="float-right">

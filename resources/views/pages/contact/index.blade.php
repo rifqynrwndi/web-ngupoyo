@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Permissions')
+@section('title', 'Contacts')
 
 @push('style')
     <!-- CSS Libraries -->
@@ -11,14 +11,11 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Permissions</h1>
-                {{-- <div class="section-header-button">
-                    <a href="{{ route('permissions.create') }}" class="btn btn-primary">Add New</a>
-                </div> --}}
+                <h1>Contacts</h1>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Permissions</a></div>
-                    <div class="breadcrumb-item">All Permissions</div>
+                    <div class="breadcrumb-item active"><a href=" {{ route ('home') }}">Dashboard</a></div>
+                    <div class="breadcrumb-item"><a href="#">Contacts</a></div>
+                    <div class="breadcrumb-item">All Contacts</div>
                 </div>
             </div>
             <div class="section-body">
@@ -27,9 +24,9 @@
                         @include('layouts.alert')
                     </div>
                 </div>
-                <h2 class="section-title">Permissions</h2>
+                <h2 class="section-title">Contacts</h2>
                 <p class="section-lead">
-                    You can manage all Permissions, such as editing, deleting and more.
+                    You can manage all Contacts, such as editing, deleting and more.
                 </p>
 
 
@@ -37,12 +34,12 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>All Permissions</h4>
+                                <h4>All Contacts</h4>
                             </div>
                             <div class="card-body">
 
                                 <div class="float-right">
-                                    <form method="GET" action="{{ route('permissions.index') }}">
+                                    <form method="GET" action="{{ route('contacts.index') }}">
                                         <div class="input-group">
                                             <input type="text" class="form-control" placeholder="Search by name" name="name">
                                             <div class="input-group-append">
@@ -59,33 +56,25 @@
                                         <tr>
 
                                             <th>Nama</th>
-                                            <th>Jenis</th>
-                                            <th>Alasan</th>
-                                            <th>Date Permission</th>
-                                            <th>Is Approval</th>
+                                            <th>Alamat</th>
+                                            <th>Email</th>
+                                            <th>Nomor HP</th>
 
                                             <th>Action</th>
                                         </tr>
-                                        @foreach ($permissions as $permission)
+                                        @foreach ($contacts as $contact)
                                         <tr>
-                                            <td>{{ $permission['userId']['fullName'] ?? '-' }}</td>
-                                            <td>{{ $permission['jenisPermission'] ?? '-' }}</td>
-                                            <td>{{ $permission['alasan'] ?? '-' }}</td>
-                                            <td>
-                                                {{ \Carbon\Carbon::parse($permission['tanggalMulai'])->translatedFormat('d M Y') }}
-                                                -
-                                                {{ \Carbon\Carbon::parse($permission['tanggalSelesai'])->translatedFormat('d M Y') }}
-                                            </td>
-                                            <td>
-                                                {{ $permission['status'] ?? 'Menunggu Persetujuan' }}
-                                            </td>
+                                            <td>{{ $contact['userId']['fullName'] ?? '-' }}</td>
+                                            <td>{{ $contact['address'] ?? '-' }}</td>
+                                            <td>{{ $contact['email'] ?? '-' }}</td>
+                                            <td>{{ $contact['phone'] ?? '-' }}</td>
                                             <td>
                                                 <div class="d-flex justify-content-center">
                                                     <a href="#" class="btn btn-sm btn-info btn-icon">
                                                         <i class="fas fa-eye"></i> Detail
                                                     </a>
                                                     {{-- Untuk delete, kita perlu simpan _id --}}
-                                                    <form action="{{ route('permissions.destroy', $permission['_id']) }}" method="POST" class="ml-2">
+                                                    <form action="{{ route('contacts.destroy', $contact['_id']) }}" method="POST" class="ml-2">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button class="btn btn-sm btn-danger btn-icon confirm-delete">
@@ -99,7 +88,7 @@
                                     </table>
                                 </div>
                                 <div class="float-right">
-                                    {{ $permissions->withQueryString()->links() }}
+                                    {{ $contacts->withQueryString()->links() }}
                                 </div>
                             </div>
                         </div>

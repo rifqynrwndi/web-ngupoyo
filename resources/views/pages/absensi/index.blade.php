@@ -44,7 +44,7 @@
                                 <div class="float-right">
                                     <form method="GET" action="{{ route('attendances.index') }}">
                                         <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Search by patient name" name="name">
+                                            <input type="text" class="form-control" placeholder="Search by worker name" name="name">
                                             <div class="input-group-append">
                                                 <button class="btn btn-primary"><i class="fas fa-search"></i></button>
                                             </div>
@@ -54,7 +54,7 @@
 
                                 <div class="clearfix mb-3"></div>
 
-                                <div class="table-responsive">
+                                {{-- <div class="table-responsive">
                                     <table class="table-striped table">
                                         <tr>
 
@@ -112,9 +112,9 @@
 
 
                                     </table>
-                                </div>
+                                </div> --}}
                                 <div class="float-right">
-                                    {{ $attendances->withQueryString()->links() }}
+                                    {{-- {{ $attendances->withQueryString()->links() }} --}}
                                 </div>
                             </div>
                         </div>

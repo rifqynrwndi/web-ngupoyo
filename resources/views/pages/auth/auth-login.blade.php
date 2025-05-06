@@ -37,10 +37,6 @@
             @endif
         </div>
     </div>
-
-    <div class="text-muted mt-5 text-center">
-        Don't have an account? <a href="/register">Create One</a>
-    </div>
 @endsection
 
 @push('scripts')

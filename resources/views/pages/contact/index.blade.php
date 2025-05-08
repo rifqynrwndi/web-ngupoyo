@@ -64,17 +64,16 @@
                                         </tr>
                                         @foreach ($contacts as $contact)
                                         <tr>
-                                            <td>{{ $contact['userId']['fullName'] ?? '-' }}</td>
+                                            <td>{{ ($contact['firstName'] ?? '') . ' ' . ($contact['lastName'] ?? '') ?: '-' }}</td>
                                             <td>{{ $contact['address'] ?? '-' }}</td>
                                             <td>{{ $contact['email'] ?? '-' }}</td>
                                             <td>{{ $contact['phone'] ?? '-' }}</td>
                                             <td>
                                                 <div class="d-flex justify-content-center">
-                                                    <a href="#" class="btn btn-sm btn-info btn-icon">
+                                                    <a href="{{ route('contacts.edit', $contact['userId']['_id']) }}" class="btn btn-sm btn-info btn-icon">
                                                         <i class="fas fa-eye"></i> Detail
                                                     </a>
-                                                    {{-- Untuk delete, kita perlu simpan _id --}}
-                                                    <form action="{{ route('contacts.destroy', $contact['_id']) }}" method="POST" class="ml-2">
+                                                    <form action="{{ route('contacts.destroy', $contact['userId']['_id']) }}" method="POST" class="ml-2">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button class="btn btn-sm btn-danger btn-icon confirm-delete">

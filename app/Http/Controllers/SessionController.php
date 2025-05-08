@@ -37,6 +37,10 @@ class SessionController extends Controller
 
             $user = $userResponse->json('data');
 
+            if (!isset($user['role']) || $user['role'] !== 'admin') {
+                return back()->with('error', 'Hanya admin yang diizinkan login.');
+            }
+
             // Step 3: Simpan ke session Laravel
             session([
                 'token' => $token,

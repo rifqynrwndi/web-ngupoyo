@@ -20,6 +20,8 @@ Route::middleware([ApiSessionAuth::class])->group(function () {
     Route::resource('attendances', AttendanceController::class);
     Route::resource('contacts', ContactController::class);
     Route::resource('permissions', PermissionController::class);
+    Route::get('/permissions/{id}/show-modal', [PermissionController::class, 'showModal']);
+    Route::put('/permissions/{id}/approve', [PermissionController::class, 'approve'])->name('permissions.approve');
 });
 
 Route::post('/login', [SessionController::class, 'submitLogin'])->name('login.submit');

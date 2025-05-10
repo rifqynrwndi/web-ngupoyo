@@ -71,7 +71,7 @@
                                             <td>
                                                 <div class="d-flex justify-content-center">
                                                     <a href="{{ route('contacts.edit', $contact['userId']['_id']) }}" class="btn btn-sm btn-info btn-icon">
-                                                        <i class="fas fa-eye"></i> Detail
+                                                        <i class="fas fa-eye"></i> Edit
                                                     </a>
                                                     <form action="{{ route('contacts.destroy', $contact['userId']['_id']) }}" method="POST" class="ml-2">
                                                         @csrf

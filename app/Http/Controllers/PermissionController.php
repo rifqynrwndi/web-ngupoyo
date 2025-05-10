@@ -82,24 +82,52 @@ class PermissionController extends Controller
     {
         $token = session('token');
 
-        $payload = [
-            'tanggalMulai' => $request->tanggalMulai,
-            'tanggalSelesai' => $request->tanggalSelesai,
-            'jenisPermission' => $request->jenisPermission,
-            'alasan' => $request->alasan,
-            'dokumenPendukung' => $request->dokumenPendukung,
+        $validated = $request->validate([
+            'tanggalMulai' => 'required|date',
+            'tanggalSelesai' => 'required|date',
+            'jenisPermission' => 'required|string',
+            'alasan' => 'required|string',
+            'dokumenPendukung' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $multipartData = [
+            [
+                'name' => 'tanggalMulai',
+                'contents' => $request->input('tanggalMulai')
+            ],
+            [
+                'name' => 'tanggalSelesai',
+                'contents' => $request->input('tanggalSelesai')
+            ],
+            [
+                'name' => 'jenisPermission',
+                'contents' => $request->input('jenisPermission')
+            ],
+            [
+                'name' => 'alasan',
+                'contents' => $request->input('alasan')
+            ],
         ];
 
+        if ($request->hasFile('dokumenPendukung')) {
+            $file = $request->file('dokumenPendukung');
+            $multipartData[] = [
+                'name' => 'dokumenPendukung',
+                'contents' => fopen($file->getRealPath(), 'r'),
+                'filename' => $file->getClientOriginalName()
+            ];
+        }
+
         $response = Http::withToken($token)
-            ->patch("https://back-end-absensi.vercel.app/api/permission/{$id}", $payload);
+        ->asMultipart()
+        ->patch("https://back-end-absensi.vercel.app/api/permission/{$id}", $multipartData);
 
         if ($response->failed()) {
             return redirect()->back()->with('error', 'Gagal memperbarui data permission');
         }
-
+        
         return redirect()->route('permissions.index')->with('success', 'Permission updated successfully');
     }
-
 
     //delete
     public function destroy($id)

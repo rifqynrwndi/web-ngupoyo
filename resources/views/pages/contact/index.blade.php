@@ -68,19 +68,18 @@
                                             <td>{{ $contact['address'] ?? '-' }}</td>
                                             <td>{{ $contact['email'] ?? '-' }}</td>
                                             <td>{{ $contact['phone'] ?? '-' }}</td>
-                                            <td>
-                                                <div class="d-flex justify-content-center">
-                                                    <a href="{{ route('contacts.edit', $contact['userId']['_id']) }}" class="btn btn-sm btn-info btn-icon">
-                                                        <i class="fas fa-eye"></i> Edit
-                                                    </a>
-                                                    <form action="{{ route('contacts.destroy', $contact['userId']['_id']) }}" method="POST" class="ml-2">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button class="btn btn-sm btn-danger btn-icon confirm-delete">
-                                                            <i class="fas fa-times"></i> Delete
-                                                        </button>
-                                                    </form>
-                                                </div>
+                                            <td class="text-center">
+                                                <a href="{{ route('contacts.edit', $contact['userId']['_id']) }}" class="btn btn-sm btn-info mx-1">
+                                                    <i class="fas fa-eye"></i> Edit
+                                                </a>
+
+                                                <form action="{{ route('contacts.destroy', $contact['userId']['_id']) }}" method="POST" class="d-inline mx-1">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn btn-sm btn-danger confirm-delete">
+                                                        <i class="fas fa-times"></i> Delete
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach

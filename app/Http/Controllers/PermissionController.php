@@ -57,6 +57,51 @@ class PermissionController extends Controller
         return response()->json($response->json()['data']);
     }
 
+    //create
+    public function create()
+    {
+        return view('pages.permission.create');
+    }
+
+    //store
+    public function store(Request $request)
+    {
+        $token = session('token');
+
+        $validated = $request->validate([
+            'tanggalMulai' => 'required|date',
+            'tanggalSelesai' => 'required|date|after_or_equal:tanggalMulai',
+            'jenisPermission' => 'required|string|max:255',
+            'alasan' => 'required|string',
+            'dokumenPendukung' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        ]);
+
+        $multipartData = [
+            ['name' => 'tanggalMulai', 'contents' => $request->input('tanggalMulai')],
+            ['name' => 'tanggalSelesai', 'contents' => $request->input('tanggalSelesai')],
+            ['name' => 'jenisPermission', 'contents' => $request->input('jenisPermission')],
+            ['name' => 'alasan', 'contents' => $request->input('alasan')],
+        ];
+
+        if ($request->hasFile('dokumenPendukung')) {
+            $file = $request->file('dokumenPendukung');
+            $multipartData[] = [
+                'name' => 'dokumenPendukung',
+                'contents' => fopen($file->getRealPath(), 'r'),
+                'filename' => $file->getClientOriginalName()
+            ];
+        }
+
+        $response = Http::withToken($token)
+            ->asMultipart()
+            ->post("https://back-end-absensi.vercel.app/api/permission", $multipartData);
+
+        if ($response->failed()) {
+            return redirect()->back()->with('error', 'Gagal menyimpan data permission');
+        }
+
+        return redirect()->route('permissions.index')->with('success', 'Permission berhasil diajukan');
+    }
 
 
     //edit
@@ -125,7 +170,7 @@ class PermissionController extends Controller
         if ($response->failed()) {
             return redirect()->back()->with('error', 'Gagal memperbarui data permission');
         }
-        
+
         return redirect()->route('permissions.index')->with('success', 'Permission updated successfully');
     }
 

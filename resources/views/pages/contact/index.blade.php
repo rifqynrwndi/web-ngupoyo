@@ -12,6 +12,9 @@
         <section class="section">
             <div class="section-header">
                 <h1>Contacts</h1>
+                <div class="section-header-button">
+                    <a href="{{ route('contacts.create') }}" class="btn btn-primary">Add New</a>
+                </div>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href=" {{ route ('home') }}">Dashboard</a></div>
                     <div class="breadcrumb-item"><a href="#">Contacts</a></div>

@@ -34,6 +34,41 @@ class ContactController extends Controller
     return view('pages.contact.index', compact('contacts'));
     }
 
+    public function create()
+    {
+        return view('pages.contact.create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'firstName' => 'required|string',
+            'lastName' => 'required|string',
+            'email' => 'required|email',
+            'address' => 'required|string',
+            'phone' => 'required|numeric',
+        ]);
+
+        $token = session('token');
+
+        $data = [
+            'firstName' => $request->firstName,
+            'lastName' => $request->lastName,
+            'email' => $request->email,
+            'address' => $request->address,
+            'phone' => $request->phone,
+        ];
+
+        $response = Http::withToken($token)
+                        ->post('https://back-end-absensi.vercel.app/api/contact', $data);
+
+        if ($response->failed()) {
+            return redirect()->back()->with('error', 'Gagal menambahkan kontak');
+        }
+
+        return redirect()->route('contacts.index')->with('success', 'Kontak berhasil ditambahkan');
+    }
+
     public function edit($id)
     {
         $token = session('token');

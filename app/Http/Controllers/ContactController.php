@@ -36,8 +36,30 @@ class ContactController extends Controller
 
     public function create()
     {
+        $token = session('token');
+
+        $meResponse = Http::withToken($token)->get('https://back-end-absensi.vercel.app/api/auth/me');
+
+        if ($meResponse->failed()) {
+            return redirect()->back()->with('error', 'Gagal mengambil data user.');
+        }
+
+        $user = $meResponse->json('data');
+        $userId = $user['_id'] ?? null;
+
+        if (!$userId) {
+            return redirect()->back()->with('error', 'User ID tidak ditemukan.');
+        }
+
+        $contactResponse = Http::withToken($token)->get("https://back-end-absensi.vercel.app/api/contact/{$userId}");
+
+        if ($contactResponse->ok() && $contactResponse->json('data')) {
+            return redirect()->route('contacts.index')->with('error', 'Anda sudah memiliki kontak.');
+        }
+
         return view('pages.contact.create');
     }
+
 
     public function store(Request $request)
     {

@@ -13,7 +13,7 @@
                 <h1>Users</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item">Users</div>
+                    <div class="breadcrumb-item"><a href="{{ route('users.index') }}">Users</a></div>
                     <div class="breadcrumb-item">All Users</div>
                 </div>
             </div>
@@ -53,7 +53,7 @@
                                                     <td>{{ $user['fullName'] }}</td>
                                                     <td>{{ $user['username'] }}</td>
                                                     <td><span class="badge badge-{{ $user['role'] === 'admin' ? 'success' : 'primary' }}">{{ ucfirst($user['role']) }}</span></td>
-                                                    <td>{{ \Carbon\Carbon::parse($user['createdAt'])->format('d M Y, H:i') }}</td>
+                                                    <td>{{ \Carbon\Carbon::createFromFormat('d/m/Y, H.i.s', $user['createdAt'])->format('d M Y, H:i') }}</td>
                                                     <td>
                                                         <a href="{{ route('users.edit', $user['_id']) }}" class="btn btn-info btn-sm">
                                                             <i class="fas fa-edit"></i> Edit

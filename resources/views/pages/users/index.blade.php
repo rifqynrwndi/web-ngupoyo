@@ -44,7 +44,7 @@
                                                 <th>Username</th>
                                                 <th>Role</th>
                                                 <th>Created At</th>
-                                                <th>Actions</th>
+                                                <th class="text-center">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -54,7 +54,7 @@
                                                     <td>{{ $user['username'] }}</td>
                                                     <td><span class="badge badge-{{ $user['role'] === 'admin' ? 'success' : 'primary' }}">{{ ucfirst($user['role']) }}</span></td>
                                                     <td>{{ \Carbon\Carbon::createFromFormat('d/m/Y, H.i.s', $user['createdAt'])->format('d M Y, H:i') }}</td>
-                                                    <td>
+                                                    <td class="text-center">
                                                         <a href="{{ route('users.edit', $user['_id']) }}" class="btn btn-info btn-sm">
                                                             <i class="fas fa-edit"></i> Edit
                                                         </a>

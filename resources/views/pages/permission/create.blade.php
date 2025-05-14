@@ -33,7 +33,11 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label>Jenis Permission</label>
-                                <input type="text" name="jenisPermission" class="form-control" required>
+                                <select class="form-control @error('jenisPermission') is-invalid @enderror" name="jenisPermission" id="jenisPermission" required>
+                                    <option value="Izin" {{ 'Izin' ? 'selected' : '' }}>Izin</option>
+                                    <option value="Sakit" {{ 'Sakit' ? 'selected' : '' }}>Sakit</option>
+                                    <option value="Cuti" {{ 'Cuti' ? 'selected' : '' }}>Cuti</option>
+                                </select>
                             </div>
 
                             <div class="form-group">

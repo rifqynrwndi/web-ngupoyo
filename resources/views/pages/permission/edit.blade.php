@@ -46,8 +46,11 @@
                         <!-- Jenis Permission -->
                         <div class="form-group">
                             <label>Jenis Permission</label>
-                            <input type="text" name="jenisPermission" class="form-control"
-                                value="{{ $permission['jenisPermission'] }}" required>
+                            <select class="form-control @error('jenisPermission') is-invalid @enderror" name="jenisPermission" id="jenisPermission" required>
+                                <option value="Izin" {{ old('jenisPermission', $user['jenisPermission'] ?? '') === 'Izin' ? 'selected' : '' }}>Izin</option>
+                                <option value="Sakit" {{ old('jenisPermission', $user['jenisPermission'] ?? '') === 'Sakit' ? 'selected' : '' }}>Sakit</option>
+                                <option value="Cuti" {{ old('jenisPermission', $user['jenisPermission'] ?? '') === 'Cuti' ? 'selected' : '' }}>Cuti</option>
+                            </select>
                         </div>
 
                         <!-- Alasan -->

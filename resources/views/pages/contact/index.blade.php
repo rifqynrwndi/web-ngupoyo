@@ -48,7 +48,6 @@
                                 <h4>All Contacts</h4>
                             </div>
                             <div class="card-body">
-
                                 <div class="float-right">
                                     <form method="GET" action="{{ route('contacts.index') }}">
                                         <div class="input-group">
@@ -71,7 +70,7 @@
                                             <th>Email</th>
                                             <th>Nomor HP</th>
 
-                                            <th>Action</th>
+                                            <th class="text-center">Action</th>
                                         </tr>
                                         @foreach ($contacts as $contact)
                                         <tr>

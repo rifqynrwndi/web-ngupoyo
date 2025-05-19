@@ -32,5 +32,12 @@
                 </a>
             </li>
 
+            <li class="nav-item">
+                <a href="{{ route('statistics.index') }}" class="nav-link">
+                    <i class="fas fa-columns"></i>
+                    <span>Statistic</span>
+                </a>
+            </li>
+
     </aside>
 </div>

@@ -1,25 +1,34 @@
 FROM php:8.2-fpm
 
-# Install system dependencies, extensions, dll (disesuaikan)
+WORKDIR /var/www
+
+# Install dependencies
 RUN apt-get update && apt-get install -y \
-    git unzip curl libzip-dev && \
-    docker-php-ext-install zip pdo pdo_mysql
+    nginx \
+    unzip \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    git \
+    && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-WORKDIR /var/www
+# Copy project
+COPY . /var/www
 
-# ⛳️ PENTING: Copy seluruh isi project terlebih dahulu
-COPY . .
+# Install Laravel dependencies
+RUN composer install --no-dev --optimize-autoloader
 
-# 🔧 Install dependencies Laravel
-RUN composer install --no-dev --optimize-autoloader --verbose
+# Copy nginx config
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# ✅ Set permission jika perlu
-RUN chown -R www-data:www-data /var/www && chmod -R 775 /var/www/storage
+# Set permission
+RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www
 
-# ✅ (Optional) Laravel command post install
-# RUN php artisan config:cache && php artisan route:cache
+EXPOSE 8080
 
-CMD ["php-fpm"]
+CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]

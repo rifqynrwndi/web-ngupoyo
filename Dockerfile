@@ -16,7 +16,7 @@ WORKDIR /var/www
 COPY . .
 
 # Install Laravel dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader --verbose
 
 # Set permission
 RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www

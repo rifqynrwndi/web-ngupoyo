@@ -22,13 +22,28 @@ class ContactController extends Controller
 
     $data = $response->json()['data'];
 
+    $name = $request->query('name');
+    if ($name) {
+        $data = array_filter($data, function ($contact) use ($name) {
+            $fullName = strtolower(($contact['firstName'] ?? '') . ' ' . ($contact['lastName'] ?? ''));
+            return str_contains($fullName, strtolower($name));
+        });
+    }
+
     $perPage = 10;
     $currentPage = LengthAwarePaginator::resolveCurrentPage();
 
     $currentItems = array_slice($data, ($currentPage - 1) * $perPage, $perPage);
 
-    $contacts = new LengthAwarePaginator($currentItems, count($data), $perPage, $currentPage,
-    ['path' => Paginator::resolveCurrentPath()]
+    $contacts = new LengthAwarePaginator(
+        $currentItems,
+        count($data),
+        $perPage,
+        $currentPage,
+        [
+            'path' => Paginator::resolveCurrentPath(),
+            'query' => $request->query(), // penting!
+        ]
     );
 
     return view('pages.contact.index', compact('contacts'));

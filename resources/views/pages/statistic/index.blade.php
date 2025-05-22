@@ -39,7 +39,7 @@
                                         <th>Username</th>
                                         <th>Lokasi</th>
                                         <th>Tanggal</th>
-                                        <th>Waktu</th>
+                                        <th>Waktu Datang</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -54,7 +54,7 @@
                                                 </a>
                                             </td>
                                             <td>{{ $attendance['date'] }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($attendance['time'])->format('H \j\a\m i \m\e\n\i\t') }}</td>
+                                            <td>{{ \Carbon\Carbon::createFromFormat('H:i:s', $attendance['time'])->format('H:i') }}</td>
                                         </tr>
                                     @empty
                                         <tr>
@@ -81,7 +81,7 @@
                                         <th>Username</th>
                                         <th>Lokasi</th>
                                         <th>Tanggal</th>
-                                        <th>Waktu</th>
+                                        <th>Waktu Pulang</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -96,8 +96,7 @@
                                                 </a>
                                             </td>
                                             <td>{{ $attendance['date'] }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($attendance['time'])->format('H \j\a\m i \m\e\n\i\t') }}</td>
-                                        </tr>
+                                            <td>{{ \Carbon\Carbon::createFromFormat('H:i:s', $attendance['time'])->format('H:i') }}</td>                                        </tr>
                                     @empty
                                         <tr>
                                             <td colspan="5" class="text-center">Tidak ada data check-out.</td>

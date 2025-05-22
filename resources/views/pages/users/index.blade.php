@@ -40,6 +40,7 @@
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
+                                                <th>Photo</th>
                                                 <th>Name</th>
                                                 <th>Username</th>
                                                 <th>Role</th>
@@ -50,6 +51,14 @@
                                         <tbody>
                                             @forelse ($users as $user)
                                                 <tr>
+                                                    <td>
+                                                        @php
+                                                            $profileSrc = $user['profilePicture'] === 'user.jpg'
+                                                                ? asset('img/avatar/user.png')
+                                                                : $user['profilePicture'];
+                                                        @endphp
+                                                        <img src="{{ $profileSrc }}" class="rounded-circle" width="50" height="50">
+                                                    </td>
                                                     <td>{{ $user['fullName'] }}</td>
                                                     <td>{{ $user['username'] }}</td>
                                                     <td><span class="badge badge-{{ $user['role'] === 'admin' ? 'success' : 'primary' }}">{{ ucfirst($user['role']) }}</span></td>
@@ -74,8 +83,10 @@
                                             @endforelse
                                         </tbody>
                                     </table>
+                                    <div class="mt-3">
+                                        {{ $users->links() }}
+                                    </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>

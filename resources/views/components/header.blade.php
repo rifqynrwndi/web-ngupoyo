@@ -84,7 +84,7 @@
                 <div class="dropdown-list-content dropdown-list-message">
                     <a href="#" class="dropdown-item dropdown-item-unread">
                         <div class="dropdown-item-avatar">
-                            <img alt="image" src="{{ asset('img/avatar/avatar-1.png') }}" class="rounded-circle">
+                            <img alt="image" src="{{ asset('img/avatar/avatar-2.png') }}" class="rounded-circle">
                             <div class="is-online"></div>
                         </div>
                         <div class="dropdown-item-desc">
@@ -202,7 +202,7 @@
         </li>
         <li class="dropdown"><a href="#" data-toggle="dropdown"
                 class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                <img alt="image" src="{{ asset('img/avatar/avatar-1.png') }}" class="rounded-circle mr-1">
+                <img alt="image" src="{{ session('user.profilePicture') ?? asset('img/avatar/avatar-1.png') }}" class="rounded-circle mr-1">
                 <div class="d-sm-none d-lg-inline-block">Hi, {{ session('user.fullName') ?? 'Guest' }}
                 </div>
             </a>

@@ -94,9 +94,9 @@
                                         </tr>
                                     @endforeach
                                     </table>
-                                </div>
-                                <div class="float-right">
-                                    {{ $contacts->withQueryString()->links() }}
+                                <div class="mt-3">
+                                        {{ $contacts->links() }}
+                                    </div>
                                 </div>
                             </div>
                         </div>

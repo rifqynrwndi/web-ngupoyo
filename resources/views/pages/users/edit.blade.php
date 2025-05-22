@@ -23,7 +23,7 @@
                 <h2 class="section-title">Edit User</h2>
 
                 <div class="card">
-                    <form action="{{ route('users.update', $user['_id']) }}" method="POST">
+                    <form action="{{ route('users.update', $user['_id']) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -31,6 +31,17 @@
                             <h4>Update User</h4>
                         </div>
                         <div class="card-body">
+                            <div class="form-group">
+                                <label>Foto Profil</label>
+
+                                @if(!empty($user['profilePicture']))
+                                    <div class="mb-2">
+                                        <img id="preview" src="{{ $user['profilePicture'] }}" alt="Foto" width="200" class="img-thumbnail">
+                                    </div>
+                                @endif
+
+                                <input type="file" name="profilePicture" class="form-control" accept="image/*" onchange="previewImage(event)">
+                            </div>
                             <div class="form-group">
                                 <label>Full Name</label>
                                 <input type="text" class="form-control @error('fullName') is-invalid @enderror"
@@ -78,5 +89,15 @@
 @endsection
 
 @push('scripts')
+    <script>
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function(){
+            const output = document.getElementById('preview');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+    </script>
     <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
 @endpush

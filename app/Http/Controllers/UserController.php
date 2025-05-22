@@ -61,6 +61,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
+            'profilePicture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'fullName' => 'required|string|max:255',
             'username' => 'required|string|max:255',
             'role' => 'required|string|max:255',
@@ -79,6 +80,18 @@ class UserController extends Controller
 
         if ($response->failed()) {
             return redirect()->back()->with('error', 'Gagal memperbarui user');
+        }
+
+        if ($request->hasFile('profilePicture')) {
+            $profilePicture = $request->file('profilePicture');
+
+            $profilePicResponse = Http::withToken($token)
+                ->attach('profilePicture', file_get_contents($profilePicture), $profilePicture->getClientOriginalName())
+                ->patch("https://back-end-absensi.vercel.app/api/users/{$id}/profile-picture");
+
+            if ($profilePicResponse->failed()) {
+                return redirect()->back()->with('error', 'Data berhasil diperbarui, tapi gagal mengunggah foto profil.');
+            }
         }
 
         return redirect()->route('users.index')->with('success', 'User updated successfully');

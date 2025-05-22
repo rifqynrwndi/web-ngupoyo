@@ -13,10 +13,17 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www
 
 # Copy source
-COPY . .
+COPY composer.json composer.lock ./
 
-# Install Laravel dependencies
+# Step 2: Copy only config and artisan for package:discover
+COPY artisan artisan
+COPY config/ config/
+
+# Step 3: Composer install
 RUN composer install --no-dev --optimize-autoloader --verbose
+
+# Step 4: Baru copy semua
+COPY . .
 
 # Set permission
 RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www

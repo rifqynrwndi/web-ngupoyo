@@ -44,8 +44,6 @@ return [
             'throw' => false,
         ],
 
-        's3' => null,
-
     ],
 
     /*

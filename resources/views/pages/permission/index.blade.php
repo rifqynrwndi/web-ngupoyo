@@ -193,7 +193,32 @@
                     </table>
                 `;
 
-                if (res.status !== 'Disetujui' && res.status !== 'Ditolak') {
+                // Jika status disetujui tampilkan tombol ditolak, kalau ditolak tampilkan tombol disetujui, kalau pending tunjukkan tombol approve dan reject
+                if (res.status === 'Disetujui') {
+                    html += `
+                        <div class="text-center mt-3">
+                            <form action="/permissions/${res._id}/reject" method="POST" class="d-inline form-reject">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="_method" value="PATCH">
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-times"></i> Tolak
+                                </button>
+                            </form>
+                        </div>
+                    `;
+                } else if (res.status === 'Ditolak') {
+                    html += `
+                        <div class="text-center mt-3">
+                            <form action="/permissions/${res._id}/approve" method="POST" class="d-inline form-approve">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="_method" value="PUT">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-check"></i> Setujui
+                                </button>
+                            </form>
+                        </div>
+                    `;
+                } else if (res.status !== 'Disetujui' && res.status !== 'Ditolak') {
                     html += `
                         <div class="text-center mt-3">
                             <form action="/permissions/${res._id}/approve" method="POST" class="d-inline form-approve">

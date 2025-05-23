@@ -93,19 +93,6 @@
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
 
-                                                    {{-- Approve --}}
-                                                    @if ($permission['status'] !== 'Disetujui')
-                                                        <form action="{{ route('permissions.approve', $permission['_id']) }}"
-                                                              method="POST"
-                                                              class="d-inline mx-1">
-                                                            @csrf
-                                                            @method('PUT')
-                                                            <button type="submit" class="btn btn-sm btn-success">
-                                                                <i class="fas fa-check"></i> Approve
-                                                            </button>
-                                                        </form>
-                                                    @endif
-
                                                     {{-- Delete --}}
                                                     <form action="{{ route('permissions.destroy', $permission['_id']) }}"
                                                           method="POST"
@@ -205,6 +192,28 @@
                         <tr><th>Dokumen Pendukung</th><td>${filePreview}</td></tr>
                     </table>
                 `;
+
+                if (res.status !== 'Disetujui' && res.status !== 'Ditolak') {
+                    html += `
+                        <div class="text-center mt-3">
+                            <form action="/permissions/${res._id}/approve" method="POST" class="d-inline form-approve">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="_method" value="PUT">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-check"></i> Setujui
+                                </button>
+                            </form>
+
+                            <form action="/permissions/${res._id}/reject" method="POST" class="d-inline form-reject ml-2">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="_method" value="PATCH">
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-times"></i> Tolak
+                                </button>
+                            </form>
+                        </div>
+                    `;
+                }
                 $('#modal-content-body').html(html);
             },
             error: function (xhr) {

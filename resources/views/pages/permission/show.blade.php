@@ -19,9 +19,35 @@
                     Tidak ada
                 @endif
             </p>
+
+            @if ($permission['status'] !== 'Disetujui' && $permission['status'] !== 'Ditolak')
+                <div class="mt-4">
+                    {{-- Approve Button --}}
+                    <form action="{{ route('permissions.approve', $permission['_id']) }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-check"></i> Setujui
+                        </button>
+                    </form>
+
+                    {{-- Reject Button --}}
+                    <form action="{{ route('permissions.reject', $permission['_id']) }}" method="POST" class="d-inline mx-2">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-times"></i> Tolak
+                        </button>
+                    </form>
+                </div>
+            @else
+                <p><strong>Status:</strong> {{ $permission['status'] }}</p>
+            @endif
         </div>
     </div>
 
-    <a href="{{ route('permissions.index') }}" class="btn btn-secondary">Kembali</a>
+    <a href="{{ route('permissions.index') }}" class="btn btn-secondary mt-3">
+        <i class="fas fa-arrow-left"></i> Kembali
+    </a>
 </div>
 @endsection

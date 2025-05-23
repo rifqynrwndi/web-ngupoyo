@@ -203,4 +203,26 @@ class PermissionController extends Controller
         return redirect()->route('permissions.index')->with('success', 'Permission disetujui');
     }
 
+    public function reject($id)
+{
+    $token = session('token');
+
+    $multipartData = [
+        [
+            'name' => 'status',
+            'contents' => 'Ditolak'
+        ],
+    ];
+
+    $response = Http::withToken($token)
+        ->asMultipart()
+        ->patch("https://back-end-absensi.vercel.app/api/permission/{$id}/", $multipartData);
+
+    if ($response->failed()) {
+        return redirect()->back()->with('error', 'Gagal menolak permission');
+    }
+
+    return redirect()->route('permissions.index')->with('success', 'Permission berhasil ditolak');
 }
+
+    }

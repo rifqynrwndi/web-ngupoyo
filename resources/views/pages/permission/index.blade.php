@@ -193,7 +193,6 @@
                     </table>
                 `;
 
-                // Jika status disetujui tampilkan tombol ditolak, kalau ditolak tampilkan tombol disetujui, kalau pending tunjukkan tombol approve dan reject
                 if (res.status === 'Disetujui') {
                     html += `
                         <div class="text-center mt-3">

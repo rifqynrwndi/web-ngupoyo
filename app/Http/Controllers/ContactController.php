@@ -42,7 +42,7 @@ class ContactController extends Controller
         $currentPage,
         [
             'path' => Paginator::resolveCurrentPath(),
-            'query' => $request->query(), // penting!
+            'query' => $request->query(),
         ]
     );
 
@@ -165,4 +165,58 @@ class ContactController extends Controller
 
         return redirect()->back()->with('error', 'Gagal menghapus kontak.');
     }
+
+    public function adminCheckIn(Request $request, $userId)
+    {
+        $token = session('token');
+
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'latitude' => 'required|string',
+            'longitude' => 'required|string',
+            'locationName' => 'nullable|string',
+        ]);
+
+        try {
+            $response = Http::withToken($token)
+                ->attach(
+                    'image',
+                    file_get_contents($request->file('image')),
+                    $request->file('image')->getClientOriginalName()
+                )
+                ->asMultipart()
+                ->post("https://back-end-absensi.vercel.app/api/admin/attendance/check-in/{$userId}", [
+                    [
+                        'name' => 'latitude',
+                        'contents' => $request->input('latitude')
+                    ],
+                    [
+                        'name' => 'longitude',
+                        'contents' => $request->input('longitude')
+                    ],
+                    [
+                        'name' => 'locationName',
+                        'contents' => $request->input('locationName') ?? ''
+                    ],
+                ]);
+
+            if ($response->failed()) {
+                \Log::error('Admin check-in failed', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                ]);
+
+                return redirect()->back()->with('error', 'Gagal melakukan check-in.');
+            }
+
+            return redirect()->back()->with('success', 'Check-in berhasil dilakukan.');
+        } catch (\Exception $e) {
+            \Log::error('Admin check-in exception', [
+                'message' => $e->getMessage()
+            ]);
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat melakukan check-in.');
+        }
+    }
+
 }

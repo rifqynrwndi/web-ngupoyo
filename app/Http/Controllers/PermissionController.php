@@ -60,8 +60,20 @@ class PermissionController extends Controller
     //create
     public function create()
     {
-        return view('pages.permission.create');
+        $token = session('token');
+
+        $response = Http::withToken($token)
+            ->get('https://back-end-absensi.vercel.app/api/users');
+
+        if ($response->failed()) {
+            return redirect()->back()->with('error', 'Gagal mengambil data user');
+        }
+
+        $users = $response->json()['data'] ?? [];
+
+        return view('pages.permission.create', compact('users'));
     }
+
 
     //store
     public function store(Request $request)
@@ -69,6 +81,7 @@ class PermissionController extends Controller
         $token = session('token');
 
         $validated = $request->validate([
+            'user_id' => 'required',
             'tanggalMulai' => 'required|date',
             'tanggalSelesai' => 'required|date|after_or_equal:tanggalMulai',
             'jenisPermission' => 'required|string|max:255',
@@ -83,18 +96,20 @@ class PermissionController extends Controller
             ['name' => 'alasan', 'contents' => $request->input('alasan')],
         ];
 
-        if ($request->hasFile('dokumenPendukung')) {
-            $file = $request->file('dokumenPendukung');
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
             $multipartData[] = [
-                'name' => 'dokumenPendukung',
+                'name' => 'file',
                 'contents' => fopen($file->getRealPath(), 'r'),
                 'filename' => $file->getClientOriginalName()
             ];
         }
 
+        $userId = $request->input('user_id');
+
         $response = Http::withToken($token)
             ->asMultipart()
-            ->post("https://back-end-absensi.vercel.app/api/permission", $multipartData);
+            ->post("https://back-end-absensi.vercel.app/api/admin/permission/{$userId}", $multipartData);
 
         if ($response->failed()) {
             return redirect()->back()->with('error', 'Gagal menyimpan data permission');
@@ -102,7 +117,6 @@ class PermissionController extends Controller
 
         return redirect()->route('permissions.index')->with('success', 'Permission berhasil diajukan');
     }
-
 
     //edit
     public function edit($id)

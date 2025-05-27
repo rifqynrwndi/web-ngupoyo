@@ -32,6 +32,18 @@
                         <div class="card-header"><h4>Form Permission</h4></div>
                         <div class="card-body">
                             <div class="form-group">
+                                <label>User</label>
+                                    <select class="form-control @error('user_id') is-invalid @enderror" name="user_id" required>
+                                        <option value="" disabled selected>Pilih User</option>
+                                        @foreach ($users as $user)
+                                            <option value="{{ $user['_id'] }}">{{ $user['fullName'] }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('user_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                            </div>
+                            <div class="form-group">
                                 <label>Jenis Permission</label>
                                 <select class="form-control @error('jenisPermission') is-invalid @enderror" name="jenisPermission" id="jenisPermission" required>
                                     <option value="Izin" {{ 'Izin' ? 'selected' : '' }}>Izin</option>
@@ -60,14 +72,14 @@
 
                                 <div class="mb-2">
                                     <img id="preview"
-                                         src="{{ $permission['dokumenPendukung'] ?? '' }}"
+                                         src="{{ $permission['file'] ?? '' }}"
                                          alt="Dokumen Pendukung"
                                          width="200"
                                          class="img-thumbnail"
-                                         style="{{ empty($permission['dokumenPendukung']) ? 'display:none;' : '' }}">
+                                         style="{{ empty($permission['file']) ? 'display:none;' : '' }}">
                                 </div>
 
-                                <input type="file" name="dokumenPendukung" class="form-control" accept="image/*" onchange="previewImage(event)">
+                                <input type="file" name="file" class="form-control" accept="image/*" onchange="previewImage(event)">
                             </div>
 
                         </div>

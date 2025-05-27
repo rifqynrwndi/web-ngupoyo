@@ -100,4 +100,125 @@ class AttendanceController extends Controller
             ->header('Content-Type', 'application/xlsx')
             ->header('Content-Disposition', 'attachment; filename=attendance-report.xlsx');
     }
+
+    public function registerFace(Request $request)
+    {
+        $token = session('token');
+
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $response = Http::withToken($token)
+            ->attach(
+                'image',
+                file_get_contents($request->file('image')),
+                $request->file('image')->getClientOriginalName()
+            )
+            ->post('https://back-end-absensi.vercel.app/api/face/register');
+
+        if ($response->failed()) {
+            \Log::error('Face register failed', [
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
+
+            return response()->json(['message' => 'Gagal mendaftarkan wajah'], 500);
+        }
+
+        return response()->json(['message' => 'Pendaftaran wajah berhasil'], 200);
+    }
+
+    public function adminCheckOutForm()
+    {
+        $token = session('token');
+
+        $response = Http::withToken($token)
+            ->get('https://back-end-absensi.vercel.app/api/users');
+
+        if ($response->failed()) {
+            return redirect()->back()->with('error', 'Gagal mengambil data user dari API');
+        }
+
+        $users = $response->json()['data'];
+
+        return view('pages.absensi.checkout', compact('users'));
+    }
+
+    public function checkOut(Request $request, $userId)
+    {
+        $token = session('token');
+
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'latitude' => 'required|string',
+            'longitude' => 'required|string',
+            'locationName' => 'nullable|string',
+        ]);
+
+        try {
+            $multipartData = [
+                [
+                    'name' => 'image',
+                    'contents' => fopen($request->file('image')->getRealPath(), 'r'),
+                    'filename' => $request->file('image')->getClientOriginalName(),
+                ],
+                [
+                    'name' => 'latitude',
+                    'contents' => $request->input('latitude'),
+                ],
+                [
+                    'name' => 'longitude',
+                    'contents' => $request->input('longitude'),
+                ],
+                [
+                    'name' => 'locationName',
+                    'contents' => $request->input('locationName') ?? '',
+                ],
+            ];
+
+            $response = Http::withToken($token)
+                ->asMultipart()
+                ->post("https://back-end-absensi.vercel.app/api/admin/attendance/check-out/{$userId}", $multipartData);
+
+            $responseBody = $response->body();
+            $decoded = json_decode($responseBody, true);
+
+            if ($response->failed() || !$decoded) {
+                \Log::error('Admin check-out failed or response not JSON', [
+                    'status' => $response->status(),
+                    'body' => $responseBody,
+                ]);
+
+                if ($request->expectsJson()) {
+                    return response()->json(['message' => 'Gagal melakukan check-out. Response tidak valid.'], 500);
+                }
+
+                return redirect()->back()->with('error', 'Gagal melakukan check-out. Response tidak valid.');
+            }
+
+            if ($request->expectsJson()) {
+                return response()->json(['message' => $decoded['message'] ?? 'Check-out berhasil dilakukan.']);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Check-out berhasil',
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Admin check-out exception', [
+                'message' => $e->getMessage()
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Terjadi kesalahan saat melakukan check-out.'], 500);
+            }
+            return response()->json([
+                'error' => true,
+                'message' => 'Check-Out gagal',
+            ]);
+
+        }
+    }
 }

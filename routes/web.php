@@ -23,6 +23,11 @@ Route::middleware([ApiSessionAuth::class])->group(function () {
     Route::get('/attendance/{id}', [AttendanceController::class, 'show'])->name('attendance.show');
     Route::get('/attendance/export/excel', [AttendanceController::class, 'exportExcel'])->name('attendance.export.excel');
     Route::get('/attendance/export/pdf', [AttendanceController::class, 'exportPdf'])->name('attendance.export.pdf');
+    Route::get('/admin/attendance/check-in', [AttendanceController::class, 'adminCheckInForm'])->name('admin.attendance.check-in.form');
+    Route::post('/admin/attendance/check-in/{userId}', [AttendanceController::class, 'checkIn']);
+    Route::get('/admin/attendance/check-out', [AttendanceController::class, 'adminCheckOutForm'])->name('admin.attendance.check-out.form');
+    Route::post('/admin/attendance/check-out/{userId}', [AttendanceController::class, 'checkOut']);
+    Route::post('/register-face', [AttendanceController::class, 'registerFace'])->name('register.face');
     Route::resource('contacts', ContactController::class);
     Route::resource('permissions', PermissionController::class);
     Route::get('/permissions/{id}/show-modal', [PermissionController::class, 'showModal']);

@@ -204,29 +204,6 @@
 
 
 @push('scripts')
-<script>
-    document.getElementById('checkinForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const userId = document.getElementById('userSelect').value;
-        if (!userId) return alert('Silakan pilih user');
-
-        const form = e.target;
-        form.action = `/admin/attendance/check-in/${userId}`;
-        form.submit();
-    });
-</script>
-
-<script>
-    document.getElementById('checkinForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const userId = document.getElementById('userSelect').value;
-        if (!userId) return alert('Pilih user terlebih dahulu.');
-
-        const form = e.target;
-        form.action = /admin/attendance/check-in/${userId};
-        form.submit();
-    });
-</script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         let stream;

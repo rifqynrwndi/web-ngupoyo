@@ -129,6 +129,98 @@ class AttendanceController extends Controller
         return response()->json(['message' => 'Pendaftaran wajah berhasil'], 200);
     }
 
+    public function adminCheckInForm()
+    {
+        $token = session('token');
+
+        $response = Http::withToken($token)
+            ->get('https://back-end-absensi.vercel.app/api/users');
+
+        if ($response->failed()) {
+            return redirect()->back()->with('error', 'Gagal mengambil data user dari API');
+        }
+
+        $users = $response->json()['data'];
+
+        return view('pages.absensi.checkin', compact('users'));
+    }
+
+    public function checkIn(Request $request, $userId)
+    {
+        $token = session('token');
+
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'latitude' => 'required|string',
+            'longitude' => 'required|string',
+            'locationName' => 'nullable|string',
+        ]);
+
+        try {
+            $multipartData = [
+                [
+                    'name' => 'image',
+                    'contents' => fopen($request->file('image')->getRealPath(), 'r'),
+                    'filename' => $request->file('image')->getClientOriginalName(),
+                ],
+                [
+                    'name' => 'latitude',
+                    'contents' => $request->input('latitude'),
+                ],
+                [
+                    'name' => 'longitude',
+                    'contents' => $request->input('longitude'),
+                ],
+                [
+                    'name' => 'locationName',
+                    'contents' => $request->input('locationName') ?? '',
+                ],
+            ];
+
+            $response = Http::withToken($token)
+                ->asMultipart()
+                ->post("https://back-end-absensi.vercel.app/api/admin/attendance/check-in/{$userId}", $multipartData);
+
+            $responseBody = $response->body();
+            $decoded = json_decode($responseBody, true);
+
+            if ($response->failed() || !$decoded) {
+                \Log::error('Admin check-in failed or response not JSON', [
+                    'status' => $response->status(),
+                    'body' => $responseBody,
+                ]);
+
+                if ($request->expectsJson()) {
+                    return response()->json(['message' => 'Gagal melakukan check-in.'], 500);
+                }
+
+                return redirect()->back()->with('error', 'Gagal melakukan check-in.');
+            }
+
+            if ($request->expectsJson()) {
+                return response()->json(['message' => $decoded['message'] ?? 'Check-in berhasil dilakukan.']);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Check-in berhasil',
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Admin check-in exception', [
+                'message' => $e->getMessage()
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Terjadi kesalahan saat melakukan check-in.'], 500);
+            }
+            return response()->json([
+                'error' => true,
+                'message' => 'Check-In gagal',
+            ]);
+        }
+    }
+
     public function adminCheckOutForm()
     {
         $token = session('token');
@@ -191,10 +283,10 @@ class AttendanceController extends Controller
                 ]);
 
                 if ($request->expectsJson()) {
-                    return response()->json(['message' => 'Gagal melakukan check-out. Response tidak valid.'], 500);
+                    return response()->json(['message' => 'Gagal melakukan check-out.'], 500);
                 }
 
-                return redirect()->back()->with('error', 'Gagal melakukan check-out. Response tidak valid.');
+                return redirect()->back()->with('error', 'Gagal melakukan check-out.');
             }
 
             if ($request->expectsJson()) {

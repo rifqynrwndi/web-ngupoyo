@@ -18,7 +18,7 @@
                 <div class="card card-statistic-1">
                     <div class="card-icon bg-primary"><i class="fas fa-users"></i></div>
                     <div class="card-wrap">
-                        <div class="card-header"><h4>Total Karyawan</h4></div>
+                        <div class="card-header"><h4>Total Pegawai</h4></div>
                         <div class="card-body">{{ $totalUsers ?? 0 }}</div>
                     </div>
                 </div>
@@ -54,8 +54,8 @@
                                 <tr>
                                     <th>Nama</th>
                                     <th>Tanggal</th>
-                                    <th>Check-In</th>
-                                    <th>Check-Out</th>
+                                    <th>Absen Datang</th>
+                                    <th>Absen Pulang</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -80,7 +80,7 @@
         <div class="row mt-4">
             <div class="col-lg-6">
                 <div class="card">
-                    <div class="card-header"><h4>Check-In Terbaru</h4></div>
+                    <div class="card-header"><h4>Absen Datang Terbaru</h4></div>
                     <div class="card-body table-responsive">
                         <table class="table table-striped">
                             <thead>
@@ -108,7 +108,7 @@
 
             <div class="col-lg-6">
                 <div class="card">
-                    <div class="card-header"><h4>Check-Out Terbaru</h4></div>
+                    <div class="card-header"><h4>Absen Pulang Terbaru</h4></div>
                     <div class="card-body table-responsive">
                         <table class="table table-striped">
                             <thead>

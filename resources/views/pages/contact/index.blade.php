@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Contacts')
+@section('title', 'Kontak')
 
 @push('style')
     <!-- CSS Libraries -->
@@ -11,14 +11,14 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Contacts</h1>
+                <h1>Kontak</h1>
                 <div class="section-header-button">
-                    <a href="{{ route('contacts.create') }}" class="btn btn-primary">Add New</a>
+                    <a href="{{ route('contacts.create') }}" class="btn btn-primary">Tambah Kontak</a>
                 </div>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href=" {{ route ('home') }}">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Contacts</a></div>
-                    <div class="breadcrumb-item">All Contacts</div>
+                    <div class="breadcrumb-item"><a href="#">Kontak</a></div>
+                    <div class="breadcrumb-item">Semua Kontak</div>
                 </div>
             </div>
             @if(session('error'))
@@ -35,9 +35,9 @@
                         @include('layouts.alert')
                     </div>
                 </div>
-                <h2 class="section-title">Contacts</h2>
+                <h2 class="section-title">Kontak</h2>
                 <p class="section-lead">
-                    You can manage all Contacts, such as editing, deleting and more.
+                    Anda dapat mengelola semua kontak yang terdaftar di sistem.
                 </p>
 
 
@@ -45,7 +45,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>All Contacts</h4>
+                                <h4>Semua Kontak</h4>
                             </div>
                             <div class="card-body">
                                 <div class="float-right">

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Advanced Forms')
+@section('title', 'Tambah Kontak')
 
 @push('style')
     <!-- CSS Libraries -->
@@ -16,20 +16,20 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Advanced Forms</h1>
+                <h1>Tambah Kontak</h1>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Forms</a></div>
-                    <div class="breadcrumb-item">Contact</div>
+                    <div class="breadcrumb-item active"><a href="{{route('home')}}">Dashboard</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('contacts.index') }}">Kontak</a></div>
+                    <div class="breadcrumb-item">Tambah Kontak</div>
                 </div>
             </div>
 
             <div class="section-body">
-                <h2 class="section-title">Contact</h2>
+                <h2 class="section-title">Kontak</h2>
                 <div class="card">
                     <form action="{{ route('contacts.store') }}" method="POST">
                         @csrf
-                        <div class="card-header"><h4>Form Contact</h4></div>
+                        <div class="card-header"><h4>Form Kontak</h4></div>
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="firstName">Nama Depan</label>
@@ -52,7 +52,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="phone">No. Telepon</label>
+                                <label for="phone">Nomor HP</label>
                                 <input type="text" class="form-control" id="phone" name="phone" required>
                             </div>
                         </div>

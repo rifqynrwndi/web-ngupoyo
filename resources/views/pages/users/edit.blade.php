@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Edit User')
+@section('title', 'Edit Data Pegawai')
 
 @push('style')
     <!-- CSS Libraries -->
@@ -11,16 +11,16 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Edit User</h1>
+                <h1>Edit Pegawai</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="{{ route('home') }}">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="{{ route('users.index') }}">Users</a></div>
-                    <div class="breadcrumb-item">Edit User</div>
+                    <div class="breadcrumb-item"><a href="{{ route('users.index') }}">Pegawai</a></div>
+                    <div class="breadcrumb-item">Edit Pegawai</div>
                 </div>
             </div>
 
             <div class="section-body">
-                <h2 class="section-title">Edit User</h2>
+                <h2 class="section-title">Edit Pegawai</h2>
 
                 <div class="card">
                     <form action="{{ route('users.update', $user['_id']) }}" method="POST" enctype="multipart/form-data">
@@ -28,7 +28,7 @@
                         @method('PUT')
 
                         <div class="card-header">
-                            <h4>Update User</h4>
+                            <h4>Update Data Pegawai</h4>
                         </div>
                         <div class="card-body">
                             <div class="form-group">
@@ -43,7 +43,7 @@
                                 <input type="file" name="profilePicture" class="form-control" accept="image/*" onchange="previewImage(event)">
                             </div>
                             <div class="form-group">
-                                <label>Full Name</label>
+                                <label>Nama Lengkap</label>
                                 <input type="text" class="form-control @error('fullName') is-invalid @enderror"
                                     name="fullName" value="{{ old('fullName', $user['fullName']) }}">
                                 @error('fullName')

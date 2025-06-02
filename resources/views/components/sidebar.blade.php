@@ -10,32 +10,32 @@
 
             <li class="nav-item ">
                 <a href="{{ route('users.index') }}" class="nav-link "><i class="fas fa-columns"></i>
-                    <span>Users</span></a>
+                    <span>Pegawai</span></a>
             </li>
             <li class="nav-item">
                 <a href="{{ route('contacts.index') }}" class="nav-link">
                     <i class="fas fa-columns"></i>
-                    <span>Contacts</span>
+                    <span>Kontak</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ route('attendances.index') }}" class="nav-link">
                     <i class="fas fa-columns"></i>
-                    <span>Attendances</span>
+                    <span>Absensi</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a href="{{ route('permissions.index') }}" class="nav-link">
                     <i class="fas fa-columns"></i>
-                    <span>Permission</span>
+                    <span>Izin</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a href="{{ route('statistics.index') }}" class="nav-link">
                     <i class="fas fa-columns"></i>
-                    <span>Statistic</span>
+                    <span>Rekap Absensi</span>
                 </a>
             </li>
 

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Contact')
+@section('title', 'Edit Kontak')
 
 @push('style')
     <!-- CSS Libraries -->
@@ -11,16 +11,16 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Edit Contact</h1>
+                <h1>Edit Kontak</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="{{ route('home') }}">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Contacts</a></div>
-                    <div class="breadcrumb-item">Edit Contact</div>
+                    <div class="breadcrumb-item"><a href="{{route('contacts.index')}}">Kontak</a></div>
+                    <div class="breadcrumb-item">Edit Kontak</div>
                 </div>
             </div>
 
             <div class="section-body">
-                <h2 class="section-title">Edit Contact</h2>
+                <h2 class="section-title">Edit Kontak</h2>
 
                 <div class="card">
                     <form action="{{ route('contacts.update', $contact['userId']['_id']) }}" method="POST">
@@ -28,11 +28,11 @@
                         @method('PATCH')
 
                         <div class="card-header">
-                            <h4>Update Contact</h4>
+                            <h4>Update Kontak</h4>
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <label>First Name</label>
+                                <label>Nama Depan</label>
                                 <input type="text" class="form-control @error('firstName') is-invalid @enderror"
                                     name="firstName" value="{{ old('firstName', $contact['firstName']) }}">
                                 @error('firstName')
@@ -43,7 +43,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Last Name</label>
+                                <label>Nama Belakang</label>
                                 <input type="text" class="form-control @error('lastName') is-invalid @enderror"
                                     name="lastName" value="{{ old('lastName', $contact['lastName']) }}">
                                 @error('lastName')
@@ -65,7 +65,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Address</label>
+                                <label>Alamat</label>
                                 <input type="text" class="form-control @error('address') is-invalid @enderror"
                                     name="address" value="{{ old('address', $contact['address']) }}">
                                 @error('address')
@@ -76,7 +76,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Phone</label>
+                                <label>Nomor HP</label>
                                 <input type="text" class="form-control @error('phone') is-invalid @enderror"
                                     name="phone" value="{{ old('phone', $contact['phone']) }}">
                                 @error('phone')

@@ -40,6 +40,38 @@ class UserController extends Controller
     return view('pages.users.index', compact('users'));
     }
 
+    // create
+    public function create()
+    {
+        return view('pages.users.create');
+    }
+
+    // store
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'fullName' => 'required|string|max:255',
+            'username' => 'required|string|max:255',
+            'password' => 'required|string|min:8|confirmed', // Laravel will expect a `password_confirmation` field
+        ]);
+
+        $token = session('token');
+
+        $response = Http::withToken($token)
+            ->post('https://back-end-absensi.vercel.app/api/auth/register', [
+                'fullName' => $request->fullName,
+                'username' => $request->username,
+                'password' => $request->password,
+                'confirmPassword' => $request->password_confirmation,
+            ]);
+
+        if ($response->failed()) {
+            return redirect()->back()->withInput()->with('error', 'Gagal mendaftarkan Pegawai baru');
+        }
+
+        return redirect()->route('users.index')->with('success', 'Pegawai berhasil ditambahkan');
+    }
+
     //edit
     public function edit($id)
     {
@@ -104,6 +136,9 @@ class UserController extends Controller
 
         $response = Http::withToken($token)
             ->delete("https://back-end-absensi.vercel.app/api/users/{$id}");
+
+        $response = Http::withToken($token)
+            ->delete("https://back-end-absensi.vercel.app/api/contact/{$id}");
 
         if ($response->failed()) {
             return redirect()->back()->with('error', 'Gagal menghapus user');

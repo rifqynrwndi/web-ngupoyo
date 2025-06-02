@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Advanced Forms')
+@section('title', 'Tambah Izin')
 
 @push('style')
     <!-- CSS Libraries -->
@@ -16,20 +16,20 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Advanced Forms</h1>
+                <h1>Tambah Izin</h1>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Forms</a></div>
-                    <div class="breadcrumb-item">Permission</div>
+                    <div class="breadcrumb-item active"><a href="{{ route('home') }}">Dashboard</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('permissions.index') }}">Izin</a></div>
+                    <div class="breadcrumb-item">Tambah Izin</div>
                 </div>
             </div>
 
             <div class="section-body">
-                <h2 class="section-title">Permission</h2>
+                <h2 class="section-title">Izin</h2>
                 <div class="card">
                     <form action="{{ route('permissions.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <div class="card-header"><h4>Form Permission</h4></div>
+                        <div class="card-header"><h4>Form Izin</h4></div>
                         <div class="card-body">
                             <div class="form-group">
                                 <label>User</label>
@@ -44,7 +44,7 @@
                                     @enderror
                             </div>
                             <div class="form-group">
-                                <label>Jenis Permission</label>
+                                <label>Jenis Izin</label>
                                 <select class="form-control @error('jenisPermission') is-invalid @enderror" name="jenisPermission" id="jenisPermission" required>
                                     <option value="Izin" {{ 'Izin' ? 'selected' : '' }}>Izin</option>
                                     <option value="Sakit" {{ 'Sakit' ? 'selected' : '' }}>Sakit</option>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Attendance')
+@section('title', 'Rekap Absensi')
 
 @push('style')
     <link rel="stylesheet" href="{{ asset('library/selectric/public/selectric.css') }}">
@@ -10,7 +10,7 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Attendance</h1>
+                <h1>Absensi</h1>
                 <div class="section-header-button">
                     <a href="{{ route('attendance.export.pdf') }}" target="_blank" class="btn btn-danger">Export PDF</a>
                     <a href="{{ route('attendance.export.excel') }}" target="_blank" class="btn btn-success">Export Excel</a>
@@ -19,16 +19,16 @@
                 </button>
                 </div>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Attendance</a></div>
-                    <div class="breadcrumb-item">All Attendance</div>
+                    <div class="breadcrumb-item active"><a href="{{ route('home') }}">Dashboard</a></div>
+                    <div class="breadcrumb-item"><a href="{{ route('attendances.index') }}">Absensi</a></div>
+                    <div class="breadcrumb-item">Semua Absensi</div>
                 </div>
             </div>
 
             <div class="section-body">
-                <h2 class="section-title">Attendance List</h2>
+                <h2 class="section-title">Rekap Absensi</h2>
                 <p class="section-lead">
-                    You can manage all attendances, such as editing, deleting, and more.
+                    Anda dapat mengelola semua data absensi, seperti mengedit, menghapus, dan lainnya.
                 </p>
 
                 <div class="row mt-4">
@@ -39,7 +39,7 @@
 
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
-                                <h4>Check-In Attendance</h4>
+                                <h4>Rekap Absensi Datang</h4>
                                 <a href="{{ route('admin.attendance.check-in.form') }}" class="btn btn-primary">
                                     Absen Datang
                                 </a>
@@ -67,7 +67,7 @@
                                                             Lihat di Google Maps
                                                         </a>
                                                     </td>
-                                                    <td>{{ \Carbon\Carbon::parse($attendance['timestamp'])->format('d M Y, H:i') }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($attendance['timestamp'])->timezone('Asia/Jakarta')->format('d M Y, H:i') }}
                                                      <td class="text-center">
                                                         {{-- Show --}}
                                                         <a href="#"
@@ -91,7 +91,7 @@
 
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
-                                <h4>Check-Out Attendance</h4>
+                                <h4>Rekap Absensi Pulang</h4>
                                 <a href="{{ route('admin.attendance.check-out.form') }}" class="btn btn-primary">
                                     Absen Pulang
                                 </a>
@@ -119,7 +119,7 @@
                                                             Lihat di Google Maps
                                                         </a>
                                                     </td>
-                                                    <td>{{ \Carbon\Carbon::parse($attendance['timestamp'])->format('d M Y, H:i') }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($attendance['timestamp'])->timezone('Asia/Jakarta')->format('d M Y, H:i') }}</td>
                                                     <td class="text-center">
                                                         {{-- Show --}}
                                                         <a href="#"
@@ -343,7 +343,6 @@
                             <table class="table table-bordered">
                                 <tr><th>Nama</th><td>${res.userId?.fullName ?? '-'}</td></tr>
                                 <tr><th>Username</th><td>${res.userId?.username ?? '-'}</td></tr>
-                                <tr><th>Jenis</th><td>${res.type ?? '-'}</td></tr>
                                 <tr><th>Waktu</th><td>${formatTanggalWaktu(res.timestamp)}</td></tr>
                                 <tr><th>Lokasi</th>
                                     <td>

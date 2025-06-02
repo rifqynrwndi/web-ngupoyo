@@ -22,7 +22,14 @@
 
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input id="password" name="password" type="password" class="form-control" placeholder="Enter password" required>
+                    <div class="input-group">
+                        <input id="password" name="password" type="password" class="form-control" placeholder="Enter password" required>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary toggle-password" type="button" data-target="#password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -40,5 +47,21 @@
 @endsection
 
 @push('scripts')
-
+<script>
+    document.querySelectorAll('.toggle-password').forEach(button => {
+        button.addEventListener('click', () => {
+            const targetInput = document.querySelector(button.getAttribute('data-target'));
+            const icon = button.querySelector('i');
+            if (targetInput.type === 'password') {
+                targetInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                targetInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    });
+</script>
 @endpush

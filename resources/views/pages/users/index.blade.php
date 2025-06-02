@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Users')
+@section('title', 'Pegawai')
 
 @push('style')
     <link rel="stylesheet" href="{{ asset('library/selectric/public/selectric.css') }}">
@@ -10,18 +10,21 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Users</h1>
+                <h1>Pegawai</h1>
+                <div class="section-header-button">
+                    <a href="{{ route('users.create') }}" class="btn btn-primary">Tambah Pegawai</a>
+                </div>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="{{ route('users.index') }}">Users</a></div>
-                    <div class="breadcrumb-item">All Users</div>
+                    <div class="breadcrumb-item"><a href="{{ route('users.index') }}">Pegawai</a></div>
+                    <div class="breadcrumb-item">Semua Pegawai</div>
                 </div>
             </div>
 
             <div class="section-body">
-                <h2 class="section-title">User List</h2>
+                <h2 class="section-title">Daftar Pegawai</h2>
                 <p class="section-lead">
-                    You can manage all users, such as editing, deleting, and more.
+                    Halaman ini menampilkan semua pegawai yang terdaftar di sistem. Anda dapat mengelola karyawan, seperti mengedit, menghapus, dan lainnya.
                 </p>
 
                 <div class="row mt-4">
@@ -32,7 +35,7 @@
 
                         <div class="card">
                             <div class="card-header">
-                                <h4>All Users</h4>
+                                <h4>Semua Pegawai</h4>
                             </div>
                             <div class="card-body">
 
@@ -40,8 +43,8 @@
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Photo</th>
-                                                <th>Name</th>
+                                                <th>Foto</th>
+                                                <th>Nama</th>
                                                 <th>Username</th>
                                                 <th>Role</th>
                                                 <th>Created At</th>

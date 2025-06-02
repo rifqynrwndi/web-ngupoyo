@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="section-header">
-    <h1>Detail Permission</h1>
+    <h1>Detail Izin</h1>
 </div>
 
 <div class="section-body">
@@ -10,7 +10,7 @@
         <div class="card-body">
             <p><strong>Tanggal Mulai:</strong> {{ $permission['tanggalMulai'] }}</p>
             <p><strong>Tanggal Selesai:</strong> {{ $permission['tanggalSelesai'] }}</p>
-            <p><strong>Jenis Permission:</strong> {{ $permission['jenisPermission'] }}</p>
+            <p><strong>Jenis Izin:</strong> {{ $permission['jenisPermission'] }}</p>
             <p><strong>Alasan:</strong> {{ $permission['alasan'] }}</p>
             <p><strong>Dokumen Pendukung:</strong>
                 @if (!empty($permission['dokumenPendukung']))

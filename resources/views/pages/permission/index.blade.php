@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Permissions')
+@section('title', 'Izin')
 
 @push('style')
     <link rel="stylesheet" href="{{ asset('library/selectric/public/selectric.css') }}">
@@ -10,14 +10,14 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>Permissions</h1>
+            <h1>Izin</h1>
             <div class="section-header-button">
-                <a href="{{ route('permissions.create') }}" class="btn btn-primary">Add New</a>
+                <a href="{{ route('permissions.create') }}" class="btn btn-primary">Tambah Izin</a>
             </div>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                <div class="breadcrumb-item"><a href="#">Permissions</a></div>
-                <div class="breadcrumb-item">All Permissions</div>
+                <div class="breadcrumb-item active"><a href="{{ route('home') }}">Dashboard</a></div>
+                <div class="breadcrumb-item"><a href="{{ route('permissions.index') }}">Izin</a></div>
+                <div class="breadcrumb-item">Semua Izin</div>
             </div>
         </div>
 
@@ -28,16 +28,16 @@
                 </div>
             </div>
 
-            <h2 class="section-title">Permissions</h2>
+            <h2 class="section-title">Izin</h2>
             <p class="section-lead">
-                You can manage all Permissions, such as viewing, editing, approving, and deleting them.
+                Anda dapat mengelola semua izin yang terdaftar di sistem.
             </p>
 
             <div class="row mt-4">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>All Permissions</h4>
+                            <h4>Daftar Izin</h4>
                             <div class="card-header-action">
                                 <form method="GET" action="{{ route('permissions.index') }}" class="d-flex">
                                     <input type="text" name="name" class="form-control" placeholder="Search by name" value="{{ request('name') }}">
@@ -54,7 +54,7 @@
                                             <th>Nama</th>
                                             <th>Jenis</th>
                                             <th>Alasan</th>
-                                            <th>Date Permission</th>
+                                            <th>Tanggal Izin</th>
                                             <th>Status</th>
                                             <th class="text-center">Actions</th>
                                         </tr>
@@ -129,7 +129,7 @@
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="showModalLabel">Permission Detail</h5>
+          <h5 class="modal-title" id="showModalLabel">Detail Izin</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>

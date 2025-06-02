@@ -15,7 +15,7 @@
                 <a href="{{ route('permissions.create') }}" class="btn btn-primary">Tambah Izin</a>
             </div>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="{{ route('home') }}">Dashboard</a></div>
+                <div class="breadcrumb-item active"><a href="{{ route ('dashboard.index') }}">Dashboard</a></div>
                 <div class="breadcrumb-item"><a href="{{ route('permissions.index') }}">Izin</a></div>
                 <div class="breadcrumb-item">Semua Izin</div>
             </div>

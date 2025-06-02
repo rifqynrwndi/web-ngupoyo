@@ -47,7 +47,7 @@ class SessionController extends Controller
                 'user' => $user,
             ]);
 
-            return redirect()->route('home');
+            return redirect()->route('dashboard.index')->with('success', 'Login berhasil!');
         } catch (\Exception $e) {
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
@@ -64,29 +64,11 @@ class SessionController extends Controller
             'user' => $response->json()['data'],
             'token' => $token
         ]);
-        return redirect()->route('home');
+        return redirect()->route('dashboard.index')->with('success', 'Login berhasil!');
     }
 
     return back()->with('error', 'Login failed: ' . $response->status());
     }
 
-    public function home()
-    {
-    $token = session('token'); // atau bisa juga dari Authorization Header kalau pakai API sepenuhnya
-
-    if (!$token) {
-        return redirect('/')->withErrors(['message' => 'Unauthorized']);
-    }
-
-    // Validasi token dengan API jika perlu
-    $response = Http::withToken($token)->get('https://back-end-absensi.vercel.app/api/auth/me');
-
-    if ($response->status() !== 200) {
-        return redirect('/')->withErrors(['message' => 'Unauthorized']);
-    }
-
-    $user = $response->json()['data'];
-    return view('pages.dashboard', compact('user'));
-    }
 }
 

@@ -18,7 +18,7 @@
             <div class="section-header">
                 <h1>Tambah Kontak</h1>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item active"><a href="{{route('home')}}">Dashboard</a></div>
+                    <div class="breadcrumb-item active"><a href="{{ route ('dashboard.index') }}">Dashboard</a></div>
                     <div class="breadcrumb-item"><a href="{{ route('contacts.index') }}">Kontak</a></div>
                     <div class="breadcrumb-item">Tambah Kontak</div>
                 </div>

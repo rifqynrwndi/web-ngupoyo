@@ -7,6 +7,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\StatisticController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Middleware\ApiSessionAuth;
 
 
@@ -16,7 +17,6 @@ Route::get('/', function () {
 
 Route::post('/store-session', [SessionController::class, 'store']);
 Route::middleware([ApiSessionAuth::class])->group(function () {
-    Route::get('/home', [SessionController::class, 'home'])->name('home');
     Route::resource('users', UserController::class);
     Route::resource('attendances', AttendanceController::class);
     Route::resource('statistics', StatisticController::class);
@@ -33,6 +33,7 @@ Route::middleware([ApiSessionAuth::class])->group(function () {
     Route::get('/permissions/{id}/show-modal', [PermissionController::class, 'showModal']);
     Route::put('/permissions/{id}/approve', [PermissionController::class, 'approve'])->name('permissions.approve');
     Route::patch('/permissions/{id}/reject', [PermissionController::class, 'reject'])->name('permissions.reject');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 });
 
 Route::post('/login', [SessionController::class, 'submitLogin'])->name('login.submit');

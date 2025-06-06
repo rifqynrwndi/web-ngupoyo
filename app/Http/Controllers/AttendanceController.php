@@ -149,6 +149,31 @@ class AttendanceController extends Controller
     {
         $token = session('token');
 
+        $latitude = $request->input('latitude');
+        $longitude = $request->input('longitude');
+        $googleApiKey = env('API_GOOGLE_MAPS');
+
+        $geocodeResponse = Http::get("https://maps.googleapis.com/maps/api/geocode/json", [
+            'latlng' => "{$latitude},{$longitude}",
+            'language' => 'id',
+            'key' => $googleApiKey,
+        ]);
+
+        $locationName = '';
+
+        if ($geocodeResponse->ok() && isset($geocodeResponse['results'][0]['place_id'])) {
+            $placeId = $geocodeResponse['results'][0]['place_id'];
+
+            $placeDetailResponse = Http::get("https://places.googleapis.com/v1/places/{$placeId}", [
+                'fields' => 'id,displayName',
+                'key' => $googleApiKey,
+            ]);
+
+            if ($placeDetailResponse->ok() && isset($placeDetailResponse['displayName']['text'])) {
+                $locationName = $placeDetailResponse['displayName']['text'];
+            }
+        }
+
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'latitude' => 'required|string',
@@ -173,7 +198,7 @@ class AttendanceController extends Controller
                 ],
                 [
                     'name' => 'locationName',
-                    'contents' => $request->input('locationName') ?? '',
+                    'contents' => $locationName,
                 ],
             ];
 
@@ -241,6 +266,31 @@ class AttendanceController extends Controller
     {
         $token = session('token');
 
+        $latitude = $request->input('latitude');
+        $longitude = $request->input('longitude');
+        $googleApiKey = env('API_GOOGLE_MAPS');
+
+        $geocodeResponse = Http::get("https://maps.googleapis.com/maps/api/geocode/json", [
+            'latlng' => "{$latitude},{$longitude}",
+            'language' => 'id',
+            'key' => $googleApiKey,
+        ]);
+
+        $locationName = '';
+
+        if ($geocodeResponse->ok() && isset($geocodeResponse['results'][0]['place_id'])) {
+            $placeId = $geocodeResponse['results'][0]['place_id'];
+
+            $placeDetailResponse = Http::get("https://places.googleapis.com/v1/places/{$placeId}", [
+                'fields' => 'id,displayName',
+                'key' => $googleApiKey,
+            ]);
+
+            if ($placeDetailResponse->ok() && isset($placeDetailResponse['displayName']['text'])) {
+                $locationName = $placeDetailResponse['displayName']['text'];
+            }
+        }
+
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'latitude' => 'required|string',
@@ -265,7 +315,7 @@ class AttendanceController extends Controller
                 ],
                 [
                     'name' => 'locationName',
-                    'contents' => $request->input('locationName') ?? '',
+                    'contents' => $locationName,
                 ],
             ];
 

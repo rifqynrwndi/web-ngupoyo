@@ -31,7 +31,7 @@
                     Anda dapat mengelola semua data absensi, seperti mengedit, menghapus, dan lainnya.
                 </p>
 
-                <div class="row mt-4">
+                <div class="row">
                     <div class="col-12">
                         @if(session('error'))
                             <div class="alert alert-danger">{{ session('error') }}</div>
@@ -46,11 +46,12 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-striped">
+                                    <table class="table-striped table">
                                         <thead>
                                             <tr>
                                                 <th>Nama</th>
                                                 <th>Username</th>
+                                                <th>Nama Lokasi</th>
                                                 <th>Lokasi</th>
                                                 <th>Waktu</th>
                                                 <th class="text-center">Action</th>
@@ -61,6 +62,7 @@
                                                 <tr>
                                                     <td>{{ $attendance['userId']['fullName'] }}</td>
                                                     <td>{{ $attendance['userId']['username'] }}</td>
+                                                    <td>{{ $attendance['location']['name'] }}</td>
                                                     <td>
                                                         <a href="https://www.google.com/maps?q={{ $attendance['location']['latitude'] }},{{ $attendance['location']['longitude'] }}"
                                                         target="_blank">
@@ -98,11 +100,12 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-striped">
+                                    <table class="table-striped table">
                                         <thead>
                                             <tr>
                                                 <th>Nama</th>
                                                 <th>Username</th>
+                                                <th>Nama Lokasi</th>
                                                 <th>Lokasi</th>
                                                 <th>Waktu</th>
                                                 <th class="text-center">Action</th>
@@ -113,6 +116,7 @@
                                                 <tr>
                                                     <td>{{ $attendance['userId']['fullName'] }}</td>
                                                     <td>{{ $attendance['userId']['username'] }}</td>
+                                                    <td>{{ $attendance['location']['name'] }}</td>
                                                     <td>
                                                         <a href="https://www.google.com/maps?q={{ $attendance['location']['latitude'] }},{{ $attendance['location']['longitude'] }}"
                                                         target="_blank">
@@ -149,7 +153,7 @@
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="showModalLabel">Attendance Detail</h5>
+          <h5 class="modal-title" id="showModalLabel">Detail Kehadiran</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>

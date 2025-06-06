@@ -47,7 +47,6 @@
                                                 <th>Nama</th>
                                                 <th>Username</th>
                                                 <th>Role</th>
-                                                <th>Created At</th>
                                                 <th class="text-center">Actions</th>
                                             </tr>
                                         </thead>
@@ -60,13 +59,11 @@
                                                                 ? asset('img/avatar/user.png')
                                                                 : $user['profilePicture'];
                                                         @endphp
-                                                        <img src="{{ $profileSrc }}" class="rounded-circle" width="50" height="50">
+                                                        <img src="{{ $profileSrc }}" class="rounded-circle" width="60" height="60" >
                                                     </td>
                                                     <td>{{ $user['fullName'] }}</td>
                                                     <td>{{ $user['username'] }}</td>
-                                                    <td><span class="badge badge-{{ $user['role'] === 'admin' ? 'success' : 'primary' }}">{{ ucfirst($user['role']) }}</span></td>
-                                                    <td>{{ \Carbon\Carbon::createFromFormat('d/m/Y, H.i.s', $user['createdAt'])->format('d M Y, H:i') }}</td>
-                                                    <td class="text-center">
+                                                    <td><span class="badge badge-{{ $user['role'] === 'admin' ? 'success' : 'primary' }}">{{ ucfirst($user['role']) }}</span></td>                                                    <td class="text-center">
                                                         <a href="{{ route('users.edit', $user['_id']) }}" class="btn btn-info btn-sm">
                                                             <i class="fas fa-edit"></i> Edit
                                                         </a>

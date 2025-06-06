@@ -157,7 +157,6 @@
                 formData.append("image", blob, 'absen.jpg');
                 formData.append("latitude", latitude);
                 formData.append("longitude", longitude);
-                formData.append("locationName", locationName);
 
                 button.disabled = true;
 

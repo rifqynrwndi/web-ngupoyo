@@ -16,7 +16,7 @@
             <form action="{{ route('login.submit') }}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <label for="identifier">Email or Username</label>
+                    <label for="identifier">Username</label>
                     <input id="identifier" name="identifier" type="text" class="form-control" placeholder="Enter email or username" required>
                 </div>
 

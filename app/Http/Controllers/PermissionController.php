@@ -25,6 +25,10 @@ class PermissionController extends Controller
 
         $data = $response->json()['data'];
 
+        usort($data, function ($a, $b) {
+            return strtotime($b['createdAt']) <=> strtotime($a['createdAt']);
+        });
+
         $perPage = 10; // Misalnya 10 item per halaman
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
 

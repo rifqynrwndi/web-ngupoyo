@@ -34,10 +34,17 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label for="location_mode">Lokasi Saat Ini</label>
+                            <select id="location_mode" class="form-control" required>
+                                <option value="current">Gunakan Lokasi Saat Ini</option>
+                                <option value="office">Kantor PT Ngupoyo Rejeki Lestari Mulya</option>
+                            </select>
+                        </div>
                     </form>
 
                     <div class="text-center mt-4">
-                        <video id="webcam" autoplay playsinline width="320" height="240" class="rounded mb-3 border"></video>
+                        <video id="webcam" autoplay playsinline style="transform: scaleX(-1);" width="320" height="240" class="rounded mb-3 border"></video>
                         <canvas id="canvas" style="display: none;"></canvas>
                         <br>
                         <button class="btn btn-success" onclick="captureFace()">Absen Sekarang</button>
@@ -107,7 +114,6 @@
         const selectedUserId = document.getElementById('user_id').value;
         const button = document.querySelector('button[onclick="captureFace()"]');
 
-        // Validasi user
         if (!selectedUserId) {
             Swal.fire({
                 icon: 'warning',
@@ -129,7 +135,6 @@
             return;
         }
 
-        // Ambil gambar dari webcam
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -148,74 +153,96 @@
                 return;
             }
 
-            navigator.geolocation.getCurrentPosition(function (position) {
-                const latitude = position.coords.latitude.toString();
-                const longitude = position.coords.longitude.toString();
-                const locationName = 'Lokasi Terkini';
+            const locationMode = document.getElementById('location_mode').value;
+            let latitude = '';
+            let longitude = '';
+            let locationName = '';
 
-                const formData = new FormData();
-                formData.append("image", blob, 'absen.jpg');
-                formData.append("latitude", latitude);
-                formData.append("longitude", longitude);
+            if (locationMode === 'office') {
+                latitude = '-6.9307994';
+                longitude = '110.5387057';
+                locationName = 'PT Ngupoyo Rejeki Lestari Mulya';
 
-                button.disabled = true;
+                sendCheckOut(blob, selectedUserId, latitude, longitude, locationName);
+            } else {
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        latitude = position.coords.latitude.toString();
+                        longitude = position.coords.longitude.toString();
+                        locationName = '';
 
-                fetch(`/admin/attendance/check-out/${selectedUserId}`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                        'Accept': 'application/json'
+                        sendCheckOut(blob, selectedUserId, latitude, longitude, locationName);
                     },
-                    body: formData,
-                    credentials: 'same-origin'
-                })
-                .then(async res => {
-                    const data = await res.json().catch(() => null);
-                    if (!res.ok) {
+                    function (error) {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Gagal Absen',
-                            text: data?.message || 'Terjadi kesalahan saat absen.',
+                            title: 'Gagal Ambil Lokasi',
+                            text: 'Pastikan izin lokasi diaktifkan di browser.',
                         });
-                        throw new Error(data?.message || 'Request failed');
+                        video.play();
+                        loadingOverlay.style.display = 'none';
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
                     }
+                );
+            }
+        }, 'image/jpeg');
+    }
 
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil',
-                        text: data.message || 'Absen berhasil dilakukan.',
-                    }).then(() => {
-                        window.location.href = "{{ route('attendances.index') }}";
-                    });
-                })
-                .catch(err => {
-                    console.error("Fetch error:", err);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Kesalahan',
-                        text: err.message || 'Terjadi kesalahan saat mengirim data.',
-                    });
-                })
-                .finally(() => {
-                    button.disabled = false;
-                    video.play();
-                    loadingOverlay.style.display = 'none';
-                });
+    function sendCheckOut(blob, selectedUserId, latitude, longitude, locationName) {
+        const formData = new FormData();
+        formData.append("image", blob, 'absen.jpg');
+        formData.append("latitude", latitude);
+        formData.append("longitude", longitude);
+        formData.append("locationName", locationName);
 
-            }, function (error) {
+        const button = document.querySelector('button[onclick="captureFace()"]');
+        button.disabled = true;
+
+        fetch(`/admin/attendance/check-out/${selectedUserId}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Accept': 'application/json'
+            },
+            body: formData,
+            credentials: 'same-origin'
+        })
+        .then(async res => {
+            const data = await res.json().catch(() => null);
+            if (!res.ok) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Gagal Ambil Lokasi',
-                    text: 'Pastikan izin lokasi diaktifkan di browser.',
+                    title: 'Gagal Absen',
+                    text: data?.message || 'Terjadi kesalahan saat absen.',
                 });
-                video.play();
-                loadingOverlay.style.display = 'none';
-            }, {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0
+                throw new Error(data?.message || 'Request failed');
+            }
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: data.message || 'Absen berhasil dilakukan.',
+            }).then(() => {
+                window.location.href = "{{ route('attendances.index') }}";
             });
-        }, 'image/jpeg');
+        })
+        .catch(err => {
+            console.error("Fetch error:", err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Kesalahan',
+                text: err.message || 'Terjadi kesalahan saat mengirim data.',
+            });
+        })
+        .finally(() => {
+            button.disabled = false;
+            document.getElementById('webcam').play();
+            loadingOverlay.style.display = 'none';
+        });
     }
 </script>
 @endpush

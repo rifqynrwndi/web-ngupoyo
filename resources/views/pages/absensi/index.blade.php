@@ -51,7 +51,6 @@
                                             <tr>
                                                 <th>Nama</th>
                                                 <th>Username</th>
-                                                <th>Nama Lokasi</th>
                                                 <th>Lokasi</th>
                                                 <th>Waktu</th>
                                                 <th class="text-center">Action</th>
@@ -62,14 +61,10 @@
                                                 <tr>
                                                     <td>{{ $attendance['userId']['fullName'] }}</td>
                                                     <td>{{ $attendance['userId']['username'] }}</td>
-                                                    <td>{{ $attendance['location']['name'] }}</td>
-                                                    @php
-                                                        
-                                                    @endphp
                                                     <td>
                                                         <a href="https://www.google.com/maps?q={{ urlencode($attendance['location']['name'] ?? '') }}"
                                                         target="_blank">
-                                                            Lihat di Google Maps
+                                                            {{ $attendance['location']['name'] ?? 'Lokasi tidak tersedia' }}
                                                         </a>
                                                     </td>
                                                     <td>{{ \Carbon\Carbon::parse($attendance['timestamp'])->timezone('Asia/Jakarta')->format('d M Y, H:i') }}
@@ -108,7 +103,6 @@
                                             <tr>
                                                 <th>Nama</th>
                                                 <th>Username</th>
-                                                <th>Nama Lokasi</th>
                                                 <th>Lokasi</th>
                                                 <th>Waktu</th>
                                                 <th class="text-center">Action</th>
@@ -119,11 +113,10 @@
                                                 <tr>
                                                     <td>{{ $attendance['userId']['fullName'] }}</td>
                                                     <td>{{ $attendance['userId']['username'] }}</td>
-                                                    <td>{{ $attendance['location']['name'] }}</td>
                                                     <td>
                                                         <a href="https://www.google.com/maps?q={{ $attendance['location']['name'] }}"
                                                         target="_blank">
-                                                            Lihat di Google Maps
+                                                            {{ $attendance['location']['name'] }}
                                                         </a>
                                                     </td>
                                                     <td>{{ \Carbon\Carbon::parse($attendance['timestamp'])->timezone('Asia/Jakarta')->format('d M Y, H:i') }}</td>
@@ -346,73 +339,42 @@
                     url: '/attendance/' + id,
                     method: 'GET',
                     success: function (res) {
-                        const apiKey = '{{ env("API_GOOGLE_MAPS") }}';
-                        const lat = res.location?.latitude;
-                        const lng = res.location?.longitude;
+                        const locationName = res.location?.name || 'Lokasi tidak diketahui';
+                        const encodedLocation = encodeURIComponent(locationName);
 
-                        if (!lat || !lng) {
-                            $('#modal-content-body').html('<p class="text-danger">Koordinat lokasi tidak tersedia.</p>');
-                            return;
-                        }
+                        const mapIframe = `
+                            <iframe
+                                width="100%"
+                                height="300"
+                                frameborder="0"
+                                style="border:0"
+                                referrerpolicy="no-referrer-when-downgrade"
+                                src="https://www.google.com/maps?q=${encodedLocation}&output=embed"
+                                allowfullscreen>
+                            </iframe>
+                        `;
 
-                        $.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`, function (geoData) {
-                            const placeId = geoData?.results?.[0]?.place_id ?? null;
+                        let html = `
+                            <table class="table table-bordered">
+                                <tr><th>Nama</th><td>${res.userId?.fullName ?? '-'}</td></tr>
+                                <tr><th>Username</th><td>${res.userId?.username ?? '-'}</td></tr>
+                                <tr><th>Waktu</th><td>${formatTanggalWaktu(res.timestamp)}</td></tr>
+                                <tr><th>Nama Lokasi</th><td>${locationName}</td></tr>
+                                <tr><th>Lokasi</th><td>${mapIframe}</td></tr>
+                                <tr><th>Foto</th>
+                                    <td>
+                                        ${res.imageUrl ? `<img src="${res.imageUrl}" width="200" class="img-thumbnail">` : '<i>Tidak ada foto</i>'}
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
 
-                            if (!placeId) {
-                                $('#modal-content-body').html('<p class="text-danger">Place ID tidak ditemukan.</p>');
-                                return;
-                            }
-
-                            $.ajax({
-                                url: `https://places.googleapis.com/v1/places/${placeId}?key=${apiKey}`,
-                                method: 'GET',
-                                headers: {
-                                    'X-Goog-FieldMask': 'displayName',
-                                },
-                                success: function (placeData) {
-                                    const locationName = placeData?.displayName?.text ?? 'Tidak ada nama lokasi';
-                                    const encodedName = encodeURIComponent(locationName);
-
-                                    const mapIframe = `
-                                        <iframe
-                                            width="100%"
-                                            height="300"
-                                            frameborder="0"
-                                            style="border:0"
-                                            referrerpolicy="no-referrer-when-downgrade"
-                                            src="https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${encodedName}&zoom=16"
-                                            allowfullscreen>
-                                        </iframe>
-                                    `;
-
-                                    let html = `
-                                        <table class="table table-bordered">
-                                            <tr><th>Nama</th><td>${res.userId?.fullName ?? '-'}</td></tr>
-                                            <tr><th>Username</th><td>${res.userId?.username ?? '-'}</td></tr>
-                                            <tr><th>Waktu</th><td>${formatTanggalWaktu(res.timestamp)}</td></tr>
-                                            <tr><th>Nama Lokasi</th><td>${res.location.name}</td></tr>
-                                            <tr><th>Lokasi</th><td>${mapIframe}</td></tr>
-                                            <tr><th>Foto</th>
-                                                <td>
-                                                    ${res.imageUrl ? `<img src="${res.imageUrl}" width="200" class="img-thumbnail">` : '<i>Tidak ada foto</i>'}
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    `;
-
-                                    $('#modal-content-body').html(html);
-                                },
-                                error: function () {
-                                    $('#modal-content-body').html('<p class="text-danger">Gagal mengambil nama tempat dari Places API.</p>');
-                                }
-                            });
-                        });
+                        $('#modal-content-body').html(html);
                     },
                     error: function () {
                         $('#modal-content-body').html('<p class="text-danger text-center">Gagal memuat data.</p>');
                     }
                 });
-
             });
         });
     </script>

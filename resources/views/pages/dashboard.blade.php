@@ -63,8 +63,8 @@
                                 <tr>
                                     <td>{{ $item['user'] }}</td>
                                     <td>{{ date('d M Y', strtotime($item['date'])) }}</td>
-                                    <td>{{ $item['check_in'] ? date('H:i:s', strtotime($item['check_in'])) : '-' }}</td>
-                                    <td>{{ $item['check_out'] ? date('H:i:s', strtotime($item['check_out'])) : '-' }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($item['check_in'] ? date('H:i:s', strtotime($item['check_in'])) : '-')->timezone('Asia/Jakarta')->format('H:i:s')}}</td>
+                                    <td>{{ \Carbon\Carbon::parse($item['check_out'] ? date('H:i:s', strtotime($item['check_out'])) : '-')->timezone('Asia/Jakarta')->format('H:i:s')}}</td>
                                 </tr>
                                 @empty
                                 <tr><td colspan="4" class="text-center">Belum ada kehadiran hari ini.</td></tr>
@@ -95,7 +95,7 @@
                                 <tr>
                                     <td>{{ $checkin['userId']['fullName'] ?? '-' }}</td>
                                     <td>{{ date('d M Y', strtotime($checkin['timestamp'])) }}</td>
-                                    <td>{{ date('H:i:s', strtotime($checkin['timestamp'])) }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($checkin['timestamp'])->timezone('Asia/Jakarta')->format('H:i:s')}}</td>
                                 </tr>
                                 @empty
                                 <tr><td colspan="3" class="text-center">Tidak ada data check-in.</td></tr>
@@ -123,7 +123,7 @@
                                 <tr>
                                     <td>{{ $checkout['userId']['fullName'] ?? '-' }}</td>
                                     <td>{{ date('d M Y', strtotime($checkout['timestamp'])) }}</td>
-                                    <td>{{ date('H:i:s', strtotime($checkout['timestamp'])) }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($checkout['timestamp'])->timezone('Asia/Jakarta')->format('H:i:s')}}</td>
                                 </tr>
                                 @empty
                                 <tr><td colspan="3" class="text-center">Tidak ada data check-out.</td></tr>

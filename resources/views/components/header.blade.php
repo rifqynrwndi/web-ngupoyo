@@ -15,6 +15,9 @@
                 </div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
+                <a href="{{ route('auth.update-password.form') }}" class="dropdown-item has-icon">
+                    <i class="fas fa-key"></i> Ubah Password
+                </a>
                 <a href="#" class="dropdown-item has-icon text-danger"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit()">
                     <i class="fas fa-sign-out-alt"></i> Logout

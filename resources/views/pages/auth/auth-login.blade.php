@@ -13,6 +13,7 @@
         </div>
 
         <div class="card-body">
+            @include('layouts.alert')
             <form action="{{ route('login.submit') }}" method="POST">
                 @csrf
                 <div class="form-group">
@@ -64,4 +65,6 @@
         });
     });
 </script>
+<script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
+<script src="{{ asset('js/page/features-posts.js') }}"></script>
 @endpush

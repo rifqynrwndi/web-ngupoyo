@@ -64,7 +64,13 @@
                                     <td>{{ $item['user'] }}</td>
                                     <td>{{ date('d M Y', strtotime($item['date'])) }}</td>
                                     <td>{{ \Carbon\Carbon::parse($item['check_in'] ? date('H:i:s', strtotime($item['check_in'])) : '-')->timezone('Asia/Jakarta')->format('H:i:s')}}</td>
-                                    <td>{{ \Carbon\Carbon::parse($item['check_out'] ? date('H:i:s', strtotime($item['check_out'])) : '-')->timezone('Asia/Jakarta')->format('H:i:s')}}</td>
+                                    <td>
+                                        @if ($item['check_out'])
+                                            {{ \Carbon\Carbon::parse($item['check_out'])->timezone('Asia/Jakarta')->format('H:i:s') }}
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
                                 </tr>
                                 @empty
                                 <tr><td colspan="4" class="text-center">Belum ada kehadiran hari ini.</td></tr>

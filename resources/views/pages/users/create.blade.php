@@ -65,7 +65,7 @@
                             <div class="form-group">
                                 <label for="confirmPassword">Konfirmasi Password</label>
                                 <div class="input-group">
-                                    <input id="confirmPassword" name="confirmPassword" type="password" class="form-control" placeholder="Konfirmasi password" required>
+                                    <input id="password_confirmation" name="password_confirmation" type="password" class="form-control" placeholder="Konfirmasi password" required>
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary toggle-password" type="button" data-target="#confirmPassword">
                                             <i class="fas fa-eye"></i>
@@ -135,6 +135,6 @@
                 icon.classList.add('fa-eye');
             }
         });
-    });
+    }); 
 </script>
 @endpush

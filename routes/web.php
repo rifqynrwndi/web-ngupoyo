@@ -34,6 +34,8 @@ Route::middleware([ApiSessionAuth::class])->group(function () {
     Route::put('/permissions/{id}/approve', [PermissionController::class, 'approve'])->name('permissions.approve');
     Route::patch('/permissions/{id}/reject', [PermissionController::class, 'reject'])->name('permissions.reject');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/auth/update-password', [SessionController::class, 'updatePasswordForm'])->name('auth.update-password.form');
+    Route::put('/auth/update-password', [SessionController::class, 'updatePassword'])->name('auth.updatePassword');
 });
 
 Route::post('/login', [SessionController::class, 'submitLogin'])->name('login.submit');

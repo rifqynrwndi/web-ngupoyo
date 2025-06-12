@@ -70,5 +70,31 @@ class SessionController extends Controller
     return back()->with('error', 'Login failed: ' . $response->status());
     }
 
+    public function updatePasswordForm()
+    {
+        return view('pages.auth.update-password');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'oldPassword' => 'required',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $token = session('token');
+
+        $response = Http::withToken($token)->put('https://back-end-absensi.vercel.app/api/auth/update-password', [
+            'oldPassword' => $request->oldPassword,
+            'password' => $request->password,
+            'confirmPassword' => $request->password_confirmation,
+        ]);
+
+        if ($response->failed()) {
+            return back()->with('error', 'Gagal mengubah password.');
+        }
+
+        return redirect('/')->with('success', 'Password berhasil diubah. Silahkan login kembali.');
+    }
 }
 

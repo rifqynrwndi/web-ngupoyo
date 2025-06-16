@@ -48,9 +48,9 @@
                                             <td>{{ $attendance['fullName'] }}</td>
                                             <td>{{ $attendance['username'] }}</td>
                                             <td>
-                                                <a href="https://www.google.com/maps?q={{ $attendance['location']['latitude'] }},{{ $attendance['location']['longitude'] }}"
+                                                <a href="https://www.google.com/maps?q={{ $attendance['location']['name'] }}"
                                                 target="_blank">
-                                                    Lihat di Google Maps
+                                                    {{ $attendance['location']['name'] }}
                                                 </a>
                                             </td>
                                             <td>{{ $attendance['date'] }}</td>
@@ -63,7 +63,7 @@
                                     @endforelse
                                 </tbody>
                                     </table>
-                                    {{ $checkIns->links() }}
+                                {{ $checkIns->appends(['checkout-page' => request('checkout-page')])->links() }}
                                 </div>
                             </div>
                         </div>
@@ -90,9 +90,9 @@
                                             <td>{{ $attendance['fullName'] }}</td>
                                             <td>{{ $attendance['username'] }}</td>
                                             <td>
-                                                <a href="https://www.google.com/maps?q={{ $attendance['location']['latitude'] }},{{ $attendance['location']['longitude'] }}"
+                                                <a href="https://www.google.com/maps?q={{ $attendance['location']['name'] }}"
                                                 target="_blank">
-                                                    Lihat di Google Maps
+                                                    {{ $attendance['location']['name'] }}
                                                 </a>
                                             </td>
                                             <td>{{ $attendance['date'] }}</td>
@@ -104,7 +104,7 @@
                                     @endforelse
                                 </tbody>
                             </table>
-                                    {{ $checkOuts->links() }}
+                                    {{ $checkOuts->appends(['checkin-page' => request('checkin-page')])->links() }}
                                 </div>
                             </div>
                         </div>

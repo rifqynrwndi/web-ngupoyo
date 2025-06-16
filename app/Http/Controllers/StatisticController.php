@@ -30,18 +30,23 @@ class StatisticController extends Controller
 
         // Pagination manual
         $perPage = 10;
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $checkInPage = LengthAwarePaginator::resolveCurrentPage('checkin-page');
+        $checkOutPage = LengthAwarePaginator::resolveCurrentPage('checkout-page');
 
         $checkIns = new LengthAwarePaginator(
-            array_slice($checkInsRaw, ($currentPage - 1) * $perPage, $perPage),
-            count($checkInsRaw), $perPage, $currentPage,
-            ['path' => Paginator::resolveCurrentPath()]
+            array_slice($checkInsRaw, ($checkInPage - 1) * $perPage, $perPage),
+            count($checkInsRaw),
+            $perPage,
+            $checkInPage,
+            ['pageName' => 'checkin-page', 'path' => Paginator::resolveCurrentPath()]
         );
 
         $checkOuts = new LengthAwarePaginator(
-            array_slice($checkOutsRaw, ($currentPage - 1) * $perPage, $perPage),
-            count($checkOutsRaw), $perPage, $currentPage,
-            ['path' => Paginator::resolveCurrentPath()]
+            array_slice($checkOutsRaw, ($checkOutPage - 1) * $perPage, $perPage),
+            count($checkOutsRaw),
+            $perPage,
+            $checkOutPage,
+            ['pageName' => 'checkout-page', 'path' => Paginator::resolveCurrentPath()]
         );
 
         $month = $data['month'];

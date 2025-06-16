@@ -29,22 +29,23 @@ class AttendanceController extends Controller
 
         // Paginasi
         $perPage = 10;
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $checkInPage = LengthAwarePaginator::resolveCurrentPage('checkin-page');
+        $checkOutPage = LengthAwarePaginator::resolveCurrentPage('checkout-page');
 
         $paginatedCheckIns = new LengthAwarePaginator(
-            array_slice($checkIns, ($currentPage - 1) * $perPage, $perPage),
+            array_slice($checkIns, ($checkInPage - 1) * $perPage, $perPage),
             count($checkIns),
             $perPage,
-            $currentPage,
-            ['path' => Paginator::resolveCurrentPath()]
+            $checkInPage,
+            ['pageName' => 'checkin-page', 'path' => Paginator::resolveCurrentPath()]
         );
 
         $paginatedCheckOuts = new LengthAwarePaginator(
-            array_slice($checkOuts, ($currentPage - 1) * $perPage, $perPage),
+            array_slice($checkOuts, ($checkOutPage - 1) * $perPage, $perPage),
             count($checkOuts),
             $perPage,
-            $currentPage,
-            ['path' => Paginator::resolveCurrentPath()]
+            $checkOutPage,
+            ['pageName' => 'checkout-page', 'path' => Paginator::resolveCurrentPath()]
         );
 
         return view('pages.absensi.index', [

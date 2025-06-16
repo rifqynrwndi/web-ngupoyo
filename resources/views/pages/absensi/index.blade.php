@@ -59,8 +59,8 @@
                                         <tbody>
                                             @forelse ($checkIns as $attendance)
                                                 <tr>
-                                                    <td>{{ $attendance['userId']['fullName'] }}</td>
-                                                    <td>{{ $attendance['userId']['username'] }}</td>
+                                                    <td>{{ isset($attendance['userId']['fullName']) ? $attendance['userId']['fullName'] : 'Nama tidak tersedia' }}</td>
+                                                    <td>{{ isset($attendance['userId']['username']) ? $attendance['userId']['username'] : 'Username tidak tersedia' }}</td>
                                                     <td>
                                                         <a href="https://www.google.com/maps?q={{ urlencode($attendance['location']['name'] ?? '') }}"
                                                         target="_blank">
@@ -84,7 +84,7 @@
                                             @endforelse
                                         </tbody>
                                     </table>
-                                    {{ $checkIns->links() }}
+                                    {{ $checkIns->appends(['checkout-page' => request('checkout-page')])->links() }}
                                 </div>
                             </div>
                         </div>
@@ -111,8 +111,8 @@
                                         <tbody>
                                             @forelse ($checkOuts as $attendance)
                                                 <tr>
-                                                    <td>{{ $attendance['userId']['fullName'] }}</td>
-                                                    <td>{{ $attendance['userId']['username'] }}</td>
+                                                    <td>{{ isset($attendance['userId']['fullName']) ? $attendance['userId']['fullName'] : 'Nama tidak tersedia' }}</td>
+                                                    <td>{{ isset($attendance['userId']['username']) ? $attendance['userId']['username'] : 'Username tidak tersedia' }}</td>
                                                     <td>
                                                         <a href="https://www.google.com/maps?q={{ $attendance['location']['name'] }}"
                                                         target="_blank">
@@ -136,7 +136,7 @@
                                             @endforelse
                                         </tbody>
                                     </table>
-                                    {{ $checkOuts->links() }}
+                                    {{ $checkOuts->appends(['checkin-page' => request('checkin-page')])->links() }}
                                 </div>
                             </div>
                         </div>
